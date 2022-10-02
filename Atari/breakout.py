@@ -23,7 +23,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-# Create a grid of 5 x 8 rectangles. Each row is a different color. 
+# Create a grid of 6 x 5 rectangles. Each row is a different color. 
     block_color = 10 
     for j in range(6):
         for i in range(5):
@@ -33,7 +33,6 @@ while run:
 
 # Create paddle that moves back and forth
     paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
-
     keys = pygame.key.get_pressed() 
     if keys[pygame.K_LEFT] and paddle_x > 10:
         paddle_x -= 8 
@@ -46,7 +45,7 @@ while run:
     ball_x += ball_x_velo 
     ball_y -= ball_y_velo 
 
-# Ball bounces off walls, paddle, and rect
+# Ball bounces off walls and paddle
     if ball_x < 15 or ball_x > 985:
         ball_x_velo *= -1
     if ball_y < 15:
@@ -60,11 +59,15 @@ while run:
         ball_x = randint(300,700)
         ball_y = 400 
         ball_y_velo *= -1
+        lives -= 1
 
-# When ball hits rectangle, one of the RGB values drops. 
+# When ball hits rectangle, one of the RGB values drops and ball bounces off rectangle
+
+
 # If this r/g/b value is below a certain #, rectangle deletes
     pygame.time.Clock().tick(120)
     pygame.display.update()
+
 # Game over functionality
 
 """
