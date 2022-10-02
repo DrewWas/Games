@@ -12,10 +12,9 @@ pygame.display.set_caption("breakout")
 run = True
 paddle_x = randint(100,700)
 ball_x, ball_y = 700,300
-ball_x_velo = choice([-5,5])
-ball_y_velo = choice([-5,5])
+ball_x_velo = choice([-7,7])
+ball_y_velo = choice([-7,7])
 lives = 3
-block_color = 255
 
 # Create game loop (that you can exit from) (with 60FPS refresh)
 while run:
@@ -25,18 +24,21 @@ while run:
             run = False
 
 # Create a grid of 5 x 8 rectangles. Each row is a different color. 
-    for i in range(8):
-        for j in range(5):
-            pygame.draw.rect(window, (block_color,138,0), pygame.Rect(10 + (i * 200),20 + (j * 20),190,15)) 
+    block_color = 10 
+    for j in range(6):
+        for i in range(5):
+            pygame.draw.rect(window, (block_color,153,153), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35))
+        block_color += 40
+
 
 # Create paddle that moves back and forth
     paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
 
     keys = pygame.key.get_pressed() 
     if keys[pygame.K_LEFT] and paddle_x > 10:
-        paddle_x -= 6 
+        paddle_x -= 8 
     if keys[pygame.K_RIGHT] and paddle_x < 840:
-        paddle_x += 6 
+        paddle_x += 8  
     
 # Create ball 
     pygame.draw.circle(window, (255,138,0), (ball_x, ball_y), 10)
@@ -65,13 +67,16 @@ while run:
     pygame.display.update()
 # Game over functionality
 
-
-
-
 """
 OBSERVATIONS:
 
 * Lots of if statements
     - It seems like a lot to be checking 120 times a second. Are there alternatives for checking ball coordinates?
 
+* Definetly better ways to manage this code. Should definitely break it into more modular pieces in future
+
 """
+
+
+
+
