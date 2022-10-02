@@ -5,6 +5,5 @@
 
 * Atari
     - Pong
+    - Breakout
 
-* IOS
-    - Flappy Bird
