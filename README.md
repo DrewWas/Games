@@ -1,6 +1,6 @@
 # Game Development Practice
 
-### Many of the games in this repo can be pulled to train ML models 
+###Many of the games in this repo can be pulled to train ML models 
 
 
 * Atari
