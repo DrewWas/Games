@@ -16,6 +16,14 @@ ball_x_velo = choice([-7,7])
 ball_y_velo = choice([-7,7])
 lives = 3
 
+# Create a grid of 6 x 5 rectangles. Each row is a different color. 
+block_color = 10 
+blocks = []
+for j in range(6):
+    for i in range(5):
+        blocks.append(pygame.draw.rect(window, (block_color,153,153), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35)))
+    block_color += 40
+
 # Create game loop (that you can exit from) (with 60FPS refresh)
 while run:
     window.fill((0,0,0))
@@ -23,12 +31,12 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-# Create a grid of 6 x 5 rectangles. Each row is a different color. 
-    block_color = 10 
-    for j in range(6):
-        for i in range(5):
-            pygame.draw.rect(window, (block_color,153,153), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35))
-        block_color += 40
+    # FIX COLOR!!!
+    for block in blocks:
+        pygame.draw.rect(window, (0,138,255),block) 
+        print(blocks)
+
+
 
 
 # Create paddle that moves back and forth
@@ -62,7 +70,16 @@ while run:
         lives -= 1
 
 # When ball hits rectangle, one of the RGB values drops and ball bounces off rectangle
-
+    to_remove = [block for block in blocks if block.colliderect(ball)]
+    #for block in to_remove:
+        #blocks.remove(block)
+    print(len(blocks))
+    """
+    if ball.colliderect(blocks):
+        print("collision")
+        ball_y_velo *= -1
+        ball_y -= 30 * (ball_y_velo / 7) 
+    """
 
 # If this r/g/b value is below a certain #, rectangle deletes
     pygame.time.Clock().tick(120)
