@@ -34,10 +34,6 @@ while run:
     # FIX COLOR!!!
     for block in blocks:
         pygame.draw.rect(window, (0,138,255),block) 
-        print(blocks)
-
-
-
 
 # Create paddle that moves back and forth
     paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
@@ -71,21 +67,19 @@ while run:
 
 # When ball hits rectangle, one of the RGB values drops and ball bounces off rectangle
     to_remove = [block for block in blocks if block.colliderect(ball)]
-    #for block in to_remove:
-        #blocks.remove(block)
-    print(len(blocks))
-    """
-    if ball.colliderect(blocks):
-        print("collision")
+    for block in to_remove:
+        blocks.remove(block)
+    if ball.colliderect(block):
         ball_y_velo *= -1
         ball_y -= 30 * (ball_y_velo / 7) 
-    """
 
 # If this r/g/b value is below a certain #, rectangle deletes
     pygame.time.Clock().tick(120)
     pygame.display.update()
 
 # Game over functionality
+
+# Win functionality
 
 """
 OBSERVATIONS:
