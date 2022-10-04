@@ -12,8 +12,8 @@ pygame.display.set_caption("breakout")
 run = True
 paddle_x = randint(100,700)
 ball_x, ball_y = 700,300
-ball_x_velo = choice([-7,7])
-ball_y_velo = choice([-7,7])
+ball_x_velo = choice([-6,6])
+ball_y_velo = choice([-6,6])
 lives = 3
 
 # Create a grid of 6 x 5 rectangles. Each row is a different color. 
@@ -22,7 +22,6 @@ blocks = []
 for j in range(6):
     for i in range(5):
         blocks.append(pygame.draw.rect(window, (block_color,153,153), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35)))
-    block_color += 40
 
 # Create game loop (that you can exit from) (with 60FPS refresh)
 while run:
@@ -33,15 +32,18 @@ while run:
 
     # FIX COLOR!!!
     for block in blocks:
-        pygame.draw.rect(window, (0,138,255),block) 
+        pygame.draw.rect(window, (block_color,138,255), block) 
+        if (blocks.index(block) + 10) % 10  == 0:
+            #block_color += 10
+            print(blocks.index(block))
 
 # Create paddle that moves back and forth
     paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
     keys = pygame.key.get_pressed() 
     if keys[pygame.K_LEFT] and paddle_x > 10:
-        paddle_x -= 8 
+        paddle_x -= 10 
     if keys[pygame.K_RIGHT] and paddle_x < 840:
-        paddle_x += 8  
+        paddle_x += 10  
     
 # Create ball 
     pygame.draw.circle(window, (255,138,0), (ball_x, ball_y), 10)
@@ -69,11 +71,19 @@ while run:
     to_remove = [block for block in blocks if block.colliderect(ball)]
     for block in to_remove:
         blocks.remove(block)
-    if ball.colliderect(block):
+    #if ball.colliderect(block):
         ball_y_velo *= -1
-        ball_y -= 30 * (ball_y_velo / 7) 
+        ball_y -= 30 * (ball_y_velo / 6) 
+
+
+# After loss of life, game pauses and resumes on paddle movement
+
+# When ball hits paddle AND BLOCK, angle is dependent on where it hit the paddle
 
 # If this r/g/b value is below a certain #, rectangle deletes
+
+
+
     pygame.time.Clock().tick(120)
     pygame.display.update()
 
@@ -88,6 +98,9 @@ OBSERVATIONS:
     - It seems like a lot to be checking 120 times a second. Are there alternatives for checking ball coordinates?
 
 * Definetly better ways to manage this code. Should definitely break it into more modular pieces in future
+
+* Could definetly run alot smoother, especially given were already at 120 FPS
+    - Must mean theres too many calculations/check statements going on 
 
 """
 
