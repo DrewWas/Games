@@ -10,6 +10,7 @@ pygame.display.set_caption("breakout")
 
 # Variables
 run = True
+game_over = False
 paddle_x = randint(100,700)
 ball_x, ball_y = 700,300
 # put velo back to 6
@@ -23,6 +24,8 @@ blocks = []
 for j in range(6):
     for i in range(5):
         blocks.append(pygame.draw.rect(window, (255,255,255), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35)))
+
+
 
 # Create game loop (that you can exit from) (with 60FPS refresh)
 while run:
@@ -41,16 +44,22 @@ while run:
             block_color2 += 25 
 
 # Create paddle that moves back and forth
-    paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
+    if game_over == False:
+        paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
+        # Create ball
+        pygame.draw.circle(window, (255,138,0), (ball_x, ball_y), 10)
+        ball = pygame.Rect(ball_x - 7, ball_y - 7,15,15)
+        # Scoreboard 
+        pygame.font.init()
+        font = pygame.font.SysFont("Arial", 30)
+        scoreboard = window.blit(font.render("Lives: " + str(lives), False, (255,138,255)), (20,15)) 
+
     keys = pygame.key.get_pressed() 
     if keys[pygame.K_LEFT] and paddle_x > 10:
         paddle_x -= 10 
     if keys[pygame.K_RIGHT] and paddle_x < 840:
         paddle_x += 10  
     
-# Create ball 
-    pygame.draw.circle(window, (255,138,0), (ball_x, ball_y), 10)
-    ball = pygame.Rect(ball_x - 7, ball_y - 7,15,15)
     ball_x += ball_x_velo 
     ball_y -= ball_y_velo 
 
@@ -88,15 +97,21 @@ while run:
 # Lives scoreboard
     pygame.font.init()
     font = pygame.font.SysFont("Arial", 30)
-    window.blit(font.render("Lives: " + str(lives), False, (255,138,255)), (20,15)) 
+
+# Game over functionality
+    if lives == 0:
+        print("\n\nyou lost nerd\n\n")
+        run = False
+
+
+# Win functionality
+    if len(blocks) == 0:
+        print("\n\nyou won brudda\n\n")
+        run = False 
+
 
     pygame.time.Clock().tick(120)
     pygame.display.update()
-
-# Game over functionality
-
-# Win functionality
-
 
 """
 OBSERVATIONS:
@@ -104,13 +119,15 @@ OBSERVATIONS:
 * Lots of if statements
     - It seems like a lot to be checking 120 times a second. Are there alternatives for checking ball coordinates?
 
-* Definetly better ways to manage this code. Should definitely break it into more modular pieces in future
+* Definetly better ways to manage this code. Should definitely break it into more modular pieces in future (functions)
 
 * Could definetly run alot smoother, especially given were already at 120 FPS
     - Must mean theres too many calculations/check statements going on 
 
 """
-
-
+"""
+IMPROVEMENTS:
+* The game over functionality should be better
+"""
 
 
