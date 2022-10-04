@@ -12,16 +12,17 @@ pygame.display.set_caption("breakout")
 run = True
 paddle_x = randint(100,700)
 ball_x, ball_y = 700,300
+# put velo back to 6
 ball_x_velo = choice([-6,6])
 ball_y_velo = choice([-6,6])
 lives = 3
 
 # Create a grid of 6 x 5 rectangles. Each row is a different color. 
-block_color = 10 
+block_color = 255 # I dont know why I need this variable here but otherwise it dont work 
 blocks = []
 for j in range(6):
     for i in range(5):
-        blocks.append(pygame.draw.rect(window, (block_color,153,153), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35)))
+        blocks.append(pygame.draw.rect(window, (255,255,255), pygame.Rect(7 + (i * 198),60 + (j * 40),193,35)))
 
 # Create game loop (that you can exit from) (with 60FPS refresh)
 while run:
@@ -30,12 +31,14 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    # FIX COLOR!!!
+    block_color = 254 
+    block_color2 = 100
     for block in blocks:
-        pygame.draw.rect(window, (block_color,138,255), block) 
-        if (blocks.index(block) + 10) % 10  == 0:
-            #block_color += 10
-            print(blocks.index(block))
+        pygame.draw.rect(window, (block_color,block_color2,255), block) 
+        # This still needs to be fixed bc when an index is deleted, it changes the length, then when this is called again it shifts the color values
+        if (blocks.index(block) + 1) % 5  == 0:
+            block_color -= 40
+            block_color2 += 25 
 
 # Create paddle that moves back and forth
     paddle = pygame.draw.rect(window, (0,138,255), pygame.Rect(paddle_x,580,150,15))
@@ -82,7 +85,10 @@ while run:
 
 # If this r/g/b value is below a certain #, rectangle deletes
 
-
+# Lives scoreboard
+    pygame.font.init()
+    font = pygame.font.SysFont("Arial", 30)
+    window.blit(font.render("Lives: " + str(lives), False, (255,138,255)), (20,15)) 
 
     pygame.time.Clock().tick(120)
     pygame.display.update()
@@ -90,6 +96,7 @@ while run:
 # Game over functionality
 
 # Win functionality
+
 
 """
 OBSERVATIONS:
