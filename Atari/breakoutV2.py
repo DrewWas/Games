@@ -58,10 +58,13 @@ def ball():
     ball_x += ball_x_velo
     ball_y += ball_y_velo 
 
-    if ball_y > 590 or ball_y < 10:
+    if ball_y < 10:
         #ball_y -= 15 * (5/ball_y_velo) 
         ball_y_velo *= -1
-        lives -= 1 # __-----TESTING------___
+    elif ball_y > 590:
+        lives -= 1 
+        ball_y_velo *= -1 # This line will be deleted
+        # ---- FINISH BALL RESET FUNCTION. THIS CHECKPOINT IS JUST FOR SCOREBOARD -----
     if ball_x > 990 or ball_x < 10:
         #ball_x -= 15 * (5/ball_x_velo)
         ball_x_velo *= -1
