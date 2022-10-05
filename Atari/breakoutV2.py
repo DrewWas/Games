@@ -34,6 +34,7 @@ def main():
         paddle()
         ball()
         scoreboard(lives)
+        game_over(lives)
         pygame.display.update()
 
 
@@ -61,6 +62,11 @@ def ball():
     if ball_y < 10:
         #ball_y -= 15 * (5/ball_y_velo) 
         ball_y_velo *= -1
+    if ball.colliderect(paddle()):
+        ball_y_velo *= -1
+        ball_y -= 20
+        print('collision')
+
     elif ball_y > 590:
         lives -= 1 
         ball_y_velo *= -1 # This line will be deleted
@@ -77,10 +83,16 @@ def scoreboard(lives):
     window.blit(board, (20,15)) 
 
 
+# ---Game Over Functionality---
+def game_over(lives):
+    if lives == 0:
+        print("bigL")
+        # CODE HERE
+
+
 """
 TODO:
 - Make ball bounce of paddle at incident angle
-- If ball goes below paddle, player loses life
 - If player loses 3 lives, game over SCREEN
 - n x m grid of blocks
 - if ball hits block, it loses some strength (block functionality)
