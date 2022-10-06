@@ -21,20 +21,28 @@ ball_y_velo = choice([-5,5])
 lives = 3
 
 
-
 # ---Main game loop---
 def main():
     run = True
+    gameOver = False
     while run:
         window.fill((0,0,0))
+        if lives == 0: # add (or len(blocks) == 0:
+            gameOver == True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        paddle()
-        ball()
-        scoreboard(lives)
-        game_over(lives)
+        if gameOver == True:
+            game_over()
+            print("game shoudl be over")
+        else:
+            paddle()
+            ball()
+            scoreboard(lives)
+        
+
+ 
         pygame.display.update()
 
 
@@ -52,7 +60,7 @@ def paddle():
 
 # Ball and ball functionality ----(need to add ball interactions with blocks)-----
 def ball():
-    global ball_x, ball_y, ball_x_velo, ball_y_velo, lives
+    global ball_x, ball_y, ball_x_velo, ball_y_velo, lives 
     pygame.draw.circle(window, (255,138,0), (ball_x, ball_y), 10) 
     ball = pygame.Rect(ball_x - 7, ball_y - 7, 13,13)
 
@@ -84,10 +92,10 @@ def scoreboard(lives):
 
 
 # ---Game Over Functionality---
-def game_over(lives):
-    if lives == 0:
-        print("bigL")
-        # CODE HERE
+def game_over():
+    window.fill((0,0,0))
+    print("bigL")
+    # CODE HERE
 
 
 """
