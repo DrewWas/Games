@@ -27,20 +27,13 @@ def main():
     gameOver = False
     while run:
         window.fill((0,0,0))
-        if lives == 0: # add (or len(blocks) == 0:
-            gameOver == True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        if gameOver == True:
-            game_over()
-            print("game shoudl be over")
-        else:
-            paddle()
-            ball()
-            scoreboard(lives)
-        
+        paddle()
+        ball()
+        scoreboard_and_gameOver(lives)
 
  
         pygame.display.update()
@@ -85,17 +78,21 @@ def ball():
 
 
 # ---Scoreboard---
-def scoreboard(lives):
+def scoreboard_and_gameOver(lives):
     my_font = pygame.font.SysFont("Arial", 30)
     board = my_font.render("Lives: " + str(lives), False, (255,138,255))
     window.blit(board, (20,15)) 
+    if lives <= 0:
+        game_over()
+    # if len(blocks) <= 0: ___ win()
 
 
 # ---Game Over Functionality---
 def game_over():
+    my_font1 = pygame.font.SysFont("Arial", 55)
     window.fill((0,0,0))
-    print("bigL")
-    # CODE HERE
+    game_over_text = my_font1.render("You Lost :(", False, (255,38,15))
+    window.blit(game_over_text, (350,260))
 
 
 """
