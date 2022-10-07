@@ -12,7 +12,6 @@ pygame.font.init()
 
 window = pygame.display.set_mode((1000,600))
 pygame.display.set_caption("breakoutV2")
-keys = pygame.key.get_pressed()
 paddle_x = randint(0,850)
 ball_x = 100
 ball_y = 100
@@ -25,6 +24,7 @@ lives = 3
 def main():
     run = True
     gameOver = False
+    keys = pygame.key.get_pressed()
     while run:
         window.fill((0,0,0))
         for event in pygame.event.get():
@@ -35,7 +35,6 @@ def main():
         ball()
         scoreboard_and_gameOver(lives)
 
- 
         pygame.display.update()
 
 
@@ -70,8 +69,11 @@ def ball():
 
     elif ball_y > 590:
         lives -= 1 
-        ball_y_velo *= -1 # This line will be deleted
-        # ---- FINISH BALL RESET FUNCTION. THIS CHECKPOINT IS JUST FOR SCOREBOARD -----
+        ball_y = ball_y - 100
+        ball_y_velo *= -1
+        # Somewhere here, the ball needs to be updates so that it pauses in new position, not where it got passed paddle
+        pygame.time.wait(1000)
+        
     if ball_x > 990 or ball_x < 10:
         #ball_x -= 15 * (5/ball_x_velo)
         ball_x_velo *= -1
@@ -89,19 +91,20 @@ def scoreboard_and_gameOver(lives):
 
 # ---Game Over Functionality---
 def game_over():
-    my_font1 = pygame.font.SysFont("Arial", 55)
     window.fill((0,0,0))
+    my_font1 = pygame.font.SysFont("Arial", 55)
     game_over_text = my_font1.render("You Lost :(", False, (255,38,15))
     window.blit(game_over_text, (350,260))
+
 
 
 """
 TODO:
 - Make ball bounce of paddle at incident angle
-- If player loses 3 lives, game over SCREEN
 - n x m grid of blocks
 - if ball hits block, it loses some strength (block functionality)
 - if all blocks are gone. win SCREEN
+- If ball goes below screen, game quickly pauses then ball resets up top
 """
 
 

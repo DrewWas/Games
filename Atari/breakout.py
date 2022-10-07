@@ -55,6 +55,10 @@ while run:
     if keys[pygame.K_LEFT] and paddle_x > 10:
         paddle_x -= 10 
     if keys[pygame.K_RIGHT] and paddle_x < 840:
+        paddle_x += 10 
+    
+    ball_x += ball_x_velo
+    ball_y += ball_y_velo
 
 # Ball bounces off walls and paddle
     if ball_x < 15 or ball_x > 985:
