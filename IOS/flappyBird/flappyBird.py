@@ -17,7 +17,16 @@ def bird(birdY):
 def background():
     window.blit(bg, (0,0))
     window.blit(bg, (550, 0))
-    # ADD bottom shit
+    # Bottom shit
+    pygame.draw.rect(window, (205,183,149), pygame.Rect(0, 875, 800, 125))
+    pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 870, 800, 5))
+    pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 850, 800, 20))
+    pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 845, 800, 5))
+    for i in range(55):
+        tealX = 15 * i
+        # Make these fucking squares move while game is going FITFO!!!!
+        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealX, 853, 9, 14))
+    
 
 def collumns():
     return 1
@@ -29,21 +38,19 @@ def gameover(birdY, score):
     my_font = pygame.font.SysFont('Blocky', 40)
     game_over_text =  my_font.render("Game Over", False, (255,255,255))
     score_text =  my_font.render("Score: " + str(score), False, (255,255,255))
-    gameOver = False
     if birdY > 900:
         background()
-        gameOver = True
         pygame.draw.rect(window, (207,185,151), pygame.Rect(300, 320, 200, 290), 0, 20) 
         pygame.draw.rect(window, (169,149,123), pygame.Rect(315, 335, 170, 255), 0, 20) 
         window.blit(game_over_text, (325,390))
         window.blit(score_text, (350,490))
 
-    #return gameOver (???)
+    #return gameOver 
 
 
 
 def main():
-    global birdY
+    global birdY, tealX
     run = True
 
     while run:
