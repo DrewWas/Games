@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 pygame.display.init()
-window = pygame.display.set_mode((800,1000))
+window = pygame.display.set_mode((800,890))
 pygame.display.set_caption("flappy bird")
 score = 0
 birdY = 100
@@ -15,17 +15,20 @@ def bird(birdY):
 
 #Background fr
 def background():
-    window.blit(bg, (0,0))
-    window.blit(bg, (550, 0))
+    window.blit(bg, (0,-50))
+    window.blit(bg, (550, -50))
     # Bottom shit
-    pygame.draw.rect(window, (205,183,149), pygame.Rect(0, 875, 800, 125))
-    pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 870, 800, 5))
-    pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 850, 800, 20))
-    pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 845, 800, 5))
-    for i in range(55):
+    pygame.draw.rect(window, (205,183,149), pygame.Rect(0, 805, 800, 125))
+    pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 800, 800, 5))
+    pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
+    pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
+    teals_list = []
+    for i in range(110):
         tealX = 15 * i
         # Make these fucking squares move while game is going FITFO!!!!
-        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealX, 853, 9, 14))
+        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealX, 783, 9, 14))
+        teals_list.append(tealX)
+    return teals_list 
     
 
 def collumns():
@@ -49,6 +52,7 @@ def gameover(birdY, score):
 
 
 
+
 def main():
     global birdY, tealX
     run = True
@@ -61,6 +65,9 @@ def main():
 
 
         background()
+        for i in background():
+            pygame.draw.rect(window, (0,139,139), pygame.Rect(i, 783, 9, 14))
+
         bird(birdY)
         birdY += 3
         gameover(birdY, score)
