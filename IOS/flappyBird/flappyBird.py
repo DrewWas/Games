@@ -18,7 +18,6 @@ def bird(birdY, birdAngle):
     
 
 def background():
-    global tealsX
     bg = pygame.image.load("background.png")
     window.blit(bg, (0,-50))
     window.blit(bg, (550, -50))
@@ -27,10 +26,6 @@ def background():
     pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 800, 800, 5))
     pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
     pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
-        # Make these fucking squares move while game is going FITFO!!!!
-    for i in range(110):
-        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsX * i, 783, 9, 14))
-
 
 def collumns():
     return 1
@@ -67,7 +62,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+
  
+        background()
         birdY += player_velo
 
         if keys[pygame.K_SPACE]:
@@ -79,10 +76,13 @@ def main():
 
         if gameStart == True:
             player_velo = 5
-            """FIX THESE NOT ALL MOVING AT SAME VELO"""
-            tealsX -= .025
 
-        background()
+        # fix it !! :(
+        for i in range(110):
+            pos = tealsX * i
+            pygame.draw.rect(window, (0,139,139), pygame.Rect(pos, 783, 9, 14))
+
+        pos -= 3
         bird(birdY, birdAngle)
         gameover(birdY, score)
 
