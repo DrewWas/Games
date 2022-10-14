@@ -6,17 +6,19 @@ window = pygame.display.set_mode((800,890))
 pygame.display.set_caption("flappy bird")
 score = 0
 birdY = 100
-bg = pygame.image.load("background.png")
+birdAngle = 370
+gameOver = False
 teals_list = [i * 15 for i in range(110)]
 
-def bird(birdY):
+def bird(birdY, birdAngle):
     bird = pygame.image.load("bird.png")
+    bird = pygame.transform.rotate(bird, birdAngle)
     player = window.blit(bird, (100, birdY)) 
-    print(bird)
-    pygame.draw.rect(window, (255,138,0), pygame.Rect(400,200,100,100))
+    
 
 #Background fr
 def background():
+    bg = pygame.image.load("background.png")
     window.blit(bg, (0,-50))
     window.blit(bg, (550, -50))
     # Bottom shit
@@ -35,36 +37,51 @@ def scoreboad(score):
     return 1
 
 def gameover(birdY, score):
+    global gameOver
     my_font = pygame.font.SysFont('Blocky', 40)
     game_over_text =  my_font.render("Game Over", False, (255,255,255))
     score_text =  my_font.render("Score: " + str(score), False, (255,255,255))
-    if birdY > 900:
+    if birdY > 725:
+        gameOver = True
         background()
+        bird(birdY, birdAngle)
         pygame.draw.rect(window, (207,185,151), pygame.Rect(300, 320, 200, 290), 0, 20) 
         pygame.draw.rect(window, (169,149,123), pygame.Rect(315, 335, 170, 255), 0, 20) 
         window.blit(game_over_text, (325,390))
         window.blit(score_text, (350,490))
 
-    #return gameOver 
+    return gameOver 
 
 
 
 
 def main():
-    global birdY, teals_list
+    global birdY, birdAngle
     run = True
-
+    clock = pygame.time.Clock()
     while run:
+        keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
 
         background()
-        bird(birdY)
-        birdY += 3
+        bird(birdY, birdAngle)
+
+
+        if gameOver == False:
+            birdY += 6
+            if birdAngle > 270:
+                birdAngle -= 2
+            if keys[pygame.K_SPACE]:
+                birdAngle = 380
+                birdY -= 70
+
+
         gameover(birdY, score)
 
+        clock.tick(30)
         pygame.display.update()
 
 
