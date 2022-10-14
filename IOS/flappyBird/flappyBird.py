@@ -1,12 +1,14 @@
 import pygame
+from random import choice
 
 pygame.init()
 pygame.display.init()
 window = pygame.display.set_mode((800,890))
 pygame.display.set_caption("flappy bird")
 score = 0
-birdY = 100
-birdAngle = 370
+birdY = 300
+birdAngle = 336
+player_velo = choice([-3,3])
 gameOver = False
 teals_list = [i * 15 for i in range(110)]
 
@@ -56,27 +58,30 @@ def gameover(birdY, score):
 
 
 def main():
-    global birdY, birdAngle
+    global birdY, birdAngle, player_velo
     run = True
     clock = pygame.time.Clock()
+    gameStart = False
     while run:
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+ 
+
+        birdY += player_velo
+        if gameStart == False:
+            if birdY > 320 or birdY < 280:
+                player_velo *= -1
+       
+        if keys[pygame.K_SPACE]:
+            gameStart = True
+            player_velo = choice([-5,5])
 
 
         background()
         bird(birdY, birdAngle)
-
-
-        if gameOver == False:
-            birdY += 6
-            if birdAngle > 270:
-                birdAngle -= 2
-            if keys[pygame.K_SPACE]:
-                birdAngle = 380
-                birdY -= 70
+        # this will be within (if gameStarted == False) statement
 
 
         gameover(birdY, score)
