@@ -7,10 +7,12 @@ pygame.display.set_caption("flappy bird")
 score = 0
 birdY = 100
 bg = pygame.image.load("background.png")
-
+teals_list = [i * 15 for i in range(110)]
 
 def bird(birdY):
-    player = pygame.draw.rect(window, (0,138,255), pygame.Rect(100,birdY,100,100))
+    bird = pygame.image.load("bird.png")
+    player = window.blit(bird, (100, birdY)) 
+    print(bird)
     pygame.draw.rect(window, (255,138,0), pygame.Rect(400,200,100,100))
 
 #Background fr
@@ -22,14 +24,9 @@ def background():
     pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 800, 800, 5))
     pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
     pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
-    teals_list = []
     for i in range(110):
-        tealX = 15 * i
         # Make these fucking squares move while game is going FITFO!!!!
-        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealX, 783, 9, 14))
-        teals_list.append(tealX)
-    return teals_list 
-    
+        pygame.draw.rect(window, (0,139,139), pygame.Rect(teals_list[i], 783, 9, 14))
 
 def collumns():
     return 1
@@ -54,7 +51,7 @@ def gameover(birdY, score):
 
 
 def main():
-    global birdY, tealX
+    global birdY, teals_list
     run = True
 
     while run:
@@ -63,17 +60,16 @@ def main():
                 run = False
 
 
-
         background()
-        for i in background():
-            pygame.draw.rect(window, (0,139,139), pygame.Rect(i, 783, 9, 14))
-
         bird(birdY)
         birdY += 3
         gameover(birdY, score)
-
 
         pygame.display.update()
 
 
 main()
+
+
+
+# Make background end to end (all in one function)
