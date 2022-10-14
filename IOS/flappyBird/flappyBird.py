@@ -76,7 +76,7 @@ def main():
        
         if keys[pygame.K_SPACE]:
             gameStart = True
-            player_velo = choice([-5,5])
+            player_velo = 5
 
 
         background()
