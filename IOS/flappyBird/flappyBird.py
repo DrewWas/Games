@@ -10,6 +10,7 @@ birdAngle = 336
 player_velo = -1.5
 tealsX = 15
 gameOver = False
+tealsList = [i + 1 for i in range(110)]
 
 def bird(birdY, birdAngle):
     bird = pygame.image.load("bird.png")
@@ -53,7 +54,7 @@ def gameover(birdY, score):
 
 
 def main():
-    global birdY, birdAngle, player_velo, tealsX
+    global birdY, birdAngle, player_velo, tealsList
     run = True
     clock = pygame.time.Clock()
     gameStart = False
@@ -78,11 +79,11 @@ def main():
             player_velo = 5
 
         # fix it !! :(
-        for i in range(110):
-            pos = tealsX * i
-            pygame.draw.rect(window, (0,139,139), pygame.Rect(pos, 783, 9, 14))
+        for i in range(len(tealsList)):
+            pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
 
-        pos -= 3
+        for i in range(len(tealsList)):
+            tealsList[i] -= 1 
         bird(birdY, birdAngle)
         gameover(birdY, score)
 
