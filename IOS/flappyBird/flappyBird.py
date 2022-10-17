@@ -8,7 +8,6 @@ score = 0
 birdY = 300
 birdAngle = 336
 player_velo = -1.5
-tealsX = 15
 gameOver = False
 tealsList = [i + 1 for i in range(60)]
 
@@ -28,16 +27,15 @@ def background():
     pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
     pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
 
+    # Moving squares below (to make it look like were moving fr)
     for i in range(len(tealsList)):
         # This speed is subject to change once we figure out collumns
         #THIS IS SPEED!!!!
-        tealsList[i] -= .2
-        if tealsList[i] < 0:
-            tealsList.append(60)
-            tealsList.remove(tealsList[i])
-
+        tealsList[i] -= .25
         pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
-        print(len(tealsList))
+        if tealsList[i] < 0:
+            tealsList.remove(tealsList[i])
+            tealsList.append(60)
 
 
 def collumns():
