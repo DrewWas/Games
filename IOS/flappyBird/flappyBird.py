@@ -8,8 +8,8 @@ score = 0
 birdY = 300
 birdAngle = 336
 player_velo = -1.5
-gameOver = False
 tealsList = [i + 1 for i in range(60)]
+gameStart = False
 
 def bird(birdY, birdAngle):
     bird = pygame.image.load("bird.png")
@@ -27,6 +27,8 @@ def background():
     pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
     pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
 
+
+def moving_squares():
     # Moving squares below (to make it look like were moving fr)
     for i in range(len(tealsList)):
         # This speed is subject to change once we figure out collumns
@@ -37,6 +39,10 @@ def background():
             tealsList.remove(tealsList[i])
             tealsList.append(60)
 
+def static_squares():
+    for i in range(len(tealsList)):
+        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
+
 
 def collumns():
     return 1
@@ -45,29 +51,28 @@ def scoreboad(score):
     return 1
 
 def gameover(birdY, score):
-    global gameOver
+    global gameStart
     my_font = pygame.font.SysFont('Blocky', 40)
     game_over_text =  my_font.render("Game Over", False, (255,255,255))
     score_text =  my_font.render("Score: " + str(score), False, (255,255,255))
     if birdY > 725:
-        gameOver = True
+        gameStart = False
         background()
         bird(725, birdAngle)
         pygame.draw.rect(window, (207,185,151), pygame.Rect(300, 320, 200, 290), 0, 20) 
         pygame.draw.rect(window, (169,149,123), pygame.Rect(315, 335, 170, 255), 0, 20) 
         window.blit(game_over_text, (325,390))
         window.blit(score_text, (350,490))
-
-    return gameOver 
+    return gameStart
 
 
 
 
 def main():
-    global birdY, birdAngle, player_velo, tealsList
+    global birdY, birdAngle, player_velo, gameStart
     run = True
     clock = pygame.time.Clock()
-    gameStart = False
+    #gameStart = False
     while run:
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():
@@ -82,15 +87,13 @@ def main():
             gameStart = True
 
         if gameStart == False:
+            static_squares()
             if birdY > 320 or birdY < 280:
                 player_velo *= -1
 
         if gameStart == True:
             player_velo = 5
-
-        for i in range(len(tealsList)):
-            pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
-
+            moving_squares()
 
         bird(birdY, birdAngle)
         gameover(birdY, score)
