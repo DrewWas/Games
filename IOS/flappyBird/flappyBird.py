@@ -76,21 +76,27 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
+            if event.type == pygame.KEYDOWN:
+                gameStart = True
+
  
         background()
         birdY += player_velo
 
         if keys[pygame.K_SPACE]:
-            gameStart = True
+            birdY -= 20
+        if keys[pygame.K_SPACE] and gameStart == False:
+            birdY = 300
+            player_velo = 1.5
+            gameStart == True
+            
 
         if gameStart == False:
-            #static_squares()
             if birdY > 320 or birdY < 280:
                 player_velo *= -1
 
         if gameStart == True:
             player_velo = 5
-            #moving_squares()
 
         bird(birdY, birdAngle)
         gameover(birdY, score)
@@ -100,6 +106,15 @@ def main():
 
 
 main()
+
+# make game start on any key input (so we can use space for movement and not fuck up gameStart)
+# make space move bird up a normal amount (make this movement look normal
+# same shit but with the rotation angle (looks like hes falling face first then picks back up)
+# collumns
+# scoreboard 
+# after dead press space to play again
+
+
 
 
 
