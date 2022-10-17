@@ -10,7 +10,7 @@ birdAngle = 336
 player_velo = -1.5
 tealsX = 15
 gameOver = False
-tealsList = [i + 1 for i in range(110)]
+tealsList = [i + 1 for i in range(60)]
 
 def bird(birdY, birdAngle):
     bird = pygame.image.load("bird.png")
@@ -27,6 +27,18 @@ def background():
     pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 800, 800, 5))
     pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
     pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
+
+    for i in range(len(tealsList)):
+        # This speed is subject to change once we figure out collumns
+        #THIS IS SPEED!!!!
+        tealsList[i] -= .2
+        if tealsList[i] < 0:
+            tealsList.append(60)
+            tealsList.remove(tealsList[i])
+
+        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
+        print(len(tealsList))
+
 
 def collumns():
     return 1
@@ -78,12 +90,10 @@ def main():
         if gameStart == True:
             player_velo = 5
 
-        # fix it !! :(
         for i in range(len(tealsList)):
             pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
 
-        for i in range(len(tealsList)):
-            tealsList[i] -= 1 
+
         bird(birdY, birdAngle)
         gameover(birdY, score)
 
