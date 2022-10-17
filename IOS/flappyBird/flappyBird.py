@@ -8,7 +8,7 @@ score = 0
 birdY = 300
 birdAngle = 336
 player_velo = -1.5
-tealsList = [i + 1 for i in range(60)]
+groundX = 0
 gameStart = False
 
 def bird(birdY, birdAngle):
@@ -18,27 +18,21 @@ def bird(birdY, birdAngle):
     
 
 def background():
-    global gameStart
+    global gameStart, groundX
     bg = pygame.image.load("background.png")
+    ground = pygame.image.load("ground.png")
     window.blit(bg, (0,-50))
     window.blit(bg, (550, -50))
-    # Bottom shit
-    pygame.draw.rect(window, (205,183,149), pygame.Rect(0, 805, 800, 125))
-    pygame.draw.rect(window, (184,134,11), pygame.Rect(0, 800, 800, 5))
-    pygame.draw.rect(window, (32,178,170), pygame.Rect(0, 780, 800, 20))
-    pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
+    window.blit(ground, (groundX, 745)) 
+    window.blit(ground, (groundX + 420, 745)) 
+    window.blit(ground, (groundX + 840, 745)) 
+    if groundX < -400:
+        groundX = 0
 
+    if gameStart:
+        # SPEEEEEDDDDD
+        groundX -= 5
 
-    # Moving squares below (to make it look like were moving fr)
-    for i in range(len(tealsList)):
-        # This speed is subject to change once we figure out collumns
-        #THIS IS SPEED!!!!
-        if gameStart:
-            tealsList[i] -= .25
-        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
-        if tealsList[i] < 0:
-            tealsList.remove(tealsList[i])
-            tealsList.append(60)
 
 
 def collumns():
@@ -52,10 +46,10 @@ def gameover(birdY, score):
     my_font = pygame.font.SysFont('Blocky', 40)
     game_over_text =  my_font.render("Game Over", False, (255,255,255))
     score_text =  my_font.render("Score: " + str(score), False, (255,255,255))
-    if birdY > 725:
+    if birdY > 690:
         gameStart = False
         background()
-        bird(725, birdAngle)
+        bird(690, birdAngle)
         pygame.draw.rect(window, (207,185,151), pygame.Rect(300, 320, 200, 290), 0, 20) 
         pygame.draw.rect(window, (169,149,123), pygame.Rect(315, 335, 170, 255), 0, 20) 
         window.blit(game_over_text, (325,390))
@@ -66,7 +60,7 @@ def gameover(birdY, score):
 
 
 def main():
-    global birdY, birdAngle, player_velo, gameStart
+    global birdY, birdAngle, player_velo, gameStart, groundX
     run = True
     clock = pygame.time.Clock()
     #gameStart = False
@@ -80,11 +74,13 @@ def main():
                 gameStart = True
 
  
-        background()
         birdY += player_velo
 
         if keys[pygame.K_SPACE]:
-            birdY -= 20
+            birdY -= 40 
+            print("we hit da space")
+
+
         if keys[pygame.K_SPACE] and gameStart == False:
             birdY = 300
             player_velo = 1.5
@@ -98,6 +94,7 @@ def main():
         if gameStart == True:
             player_velo = 5
 
+        background()
         bird(birdY, birdAngle)
         gameover(birdY, score)
 
@@ -107,13 +104,10 @@ def main():
 
 main()
 
-# make game start on any key input (so we can use space for movement and not fuck up gameStart)
 # make space move bird up a normal amount (make this movement look normal
 # same shit but with the rotation angle (looks like hes falling face first then picks back up)
 # collumns
 # scoreboard 
-# after dead press space to play again
-
 
 
 
