@@ -18,6 +18,7 @@ def bird(birdY, birdAngle):
     
 
 def background():
+    global gameStart
     bg = pygame.image.load("background.png")
     window.blit(bg, (0,-50))
     window.blit(bg, (550, -50))
@@ -28,20 +29,16 @@ def background():
     pygame.draw.rect(window, (101,67,33), pygame.Rect(0, 775, 800, 5))
 
 
-def moving_squares():
     # Moving squares below (to make it look like were moving fr)
     for i in range(len(tealsList)):
         # This speed is subject to change once we figure out collumns
         #THIS IS SPEED!!!!
-        tealsList[i] -= .25
+        if gameStart:
+            tealsList[i] -= .25
         pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
         if tealsList[i] < 0:
             tealsList.remove(tealsList[i])
             tealsList.append(60)
-
-def static_squares():
-    for i in range(len(tealsList)):
-        pygame.draw.rect(window, (0,139,139), pygame.Rect(tealsList[i] * 15, 783, 9, 14))
 
 
 def collumns():
@@ -87,13 +84,13 @@ def main():
             gameStart = True
 
         if gameStart == False:
-            static_squares()
+            #static_squares()
             if birdY > 320 or birdY < 280:
                 player_velo *= -1
 
         if gameStart == True:
             player_velo = 5
-            moving_squares()
+            #moving_squares()
 
         bird(birdY, birdAngle)
         gameover(birdY, score)
