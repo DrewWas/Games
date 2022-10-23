@@ -1,15 +1,21 @@
 import pygame
+from random import randint
 
 pygame.init()
 pygame.display.init()
 window = pygame.display.set_mode((800,890))
 pygame.display.set_caption("flappy bird")
+
 score = 0
 birdY = 300
 birdAngle = 336
 player_velo = -1.5
 groundX = 0
+collumnsX = 1100
+collumnsY = [randint(300,640) for i in range(4)]
 gameStart = False
+
+# I AM SUCH A DEGENERATE
 
 def bird(birdY, birdAngle):
     bird = pygame.image.load("bird.png")
@@ -18,11 +24,12 @@ def bird(birdY, birdAngle):
     
 
 def background():
-    global gameStart, groundX
+    global gameStart, groundX, collumnsX, collumnsY
     bg = pygame.image.load("background.png")
     ground = pygame.image.load("ground.png")
     window.blit(bg, (0,-50))
     window.blit(bg, (550, -50))
+    collumns()
     window.blit(ground, (groundX, 745)) 
     window.blit(ground, (groundX + 420, 745)) 
     window.blit(ground, (groundX + 840, 745)) 
@@ -31,12 +38,25 @@ def background():
 
     if gameStart:
         # SPEEEEEDDDDD
-        groundX -= 5
+        groundX -= 4
+        collumnsX -= 4
+
+    if collumnsX < -100:
+        collumnsX = 700
+        #collumnsY = randint(300,640)
 
 
 
 def collumns():
-    return 1
+    global collumnsY, collumnsX, gameStart
+    pipe = pygame.image.load("pipe.png")
+    pipe2 = pygame.transform.rotate(pipe, 180)
+    # -740 determines the space between pipes
+    window.blit(pipe, (collumnsX +  400, collumnsY[0]))
+    window.blit(pipe2, (collumnsX +  400, collumnsY[0] - 740))
+    print(collumnsY)
+    
+
 
 def scoreboad(score):
     return 1
@@ -60,7 +80,7 @@ def gameover(birdY, score):
 
 
 def main():
-    global birdY, birdAngle, player_velo, gameStart, groundX
+    global birdY, birdAngle, player_velo, gameStart, collumnsX
     run = True
     clock = pygame.time.Clock()
     #gameStart = False
@@ -78,12 +98,13 @@ def main():
 
         if keys[pygame.K_SPACE]:
             birdY -= 40 
-            print("we hit da space")
+            #print("we hit da space")
 
 
         if keys[pygame.K_SPACE] and gameStart == False:
             birdY = 300
             player_velo = 1.5
+            collumnsX = 1100
             gameStart == True
             
 
@@ -93,7 +114,7 @@ def main():
 
         if gameStart == True:
             player_velo = 5
-
+        
         background()
         bird(birdY, birdAngle)
         gameover(birdY, score)
