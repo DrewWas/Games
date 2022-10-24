@@ -1,3 +1,8 @@
+"""
+Honestly, right now, I don't necesarily see the point in this project. I am not really interested in pure software or pure game developement - moreso software as a means of machine larning and simulation. Therefore, I will leave my 'gamedev' phase, one that feels a bit insincere, to persue straight up ML shit. I don't know nearly enough about ML as I would like, and therefore will be moving most of my coding projects to that domain. For the past few weeks, I've kinda been like 'im not gonna start ML right now because I'm not a good enough programmer and I'll start after I have more experience from coding games.' This is the wrong mentality. Im jumping straight into this shit. Hopefully I return to coding games/sims when I get into RL, but knowing my current understanding of ML, that may be awhile. See you in the matrix
+"""
+
+
 import pygame
 from random import randint
 
@@ -33,7 +38,7 @@ def background():
     window.blit(ground, (groundX, 745)) 
     window.blit(ground, (groundX + 420, 745)) 
     window.blit(ground, (groundX + 840, 745)) 
-    if groundX < -400:
+    if groundX < -600:
         groundX = 0
 
     if gameStart:
@@ -41,7 +46,7 @@ def background():
         groundX -= 4
         collumnsX -= 4
 
-    if collumnsX < -100:
+    if collumnsX < -300:
         collumnsX = 700
         #collumnsY = randint(300,640)
 
@@ -52,8 +57,8 @@ def collumns():
     pipe = pygame.image.load("pipe.png")
     pipe2 = pygame.transform.rotate(pipe, 180)
     # -740 determines the space between pipes
-    window.blit(pipe, (collumnsX +  400, collumnsY[0]))
-    window.blit(pipe2, (collumnsX +  400, collumnsY[0] - 740))
+    window.blit(pipe, (collumnsX + 400, collumnsY[0]))
+    window.blit(pipe2, (collumnsX + 400, collumnsY[0] - 740))
 
 
 def scoreboad(score):
