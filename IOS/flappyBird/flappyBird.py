@@ -54,8 +54,6 @@ def collumns():
     # -740 determines the space between pipes
     window.blit(pipe, (collumnsX +  400, collumnsY[0]))
     window.blit(pipe2, (collumnsX +  400, collumnsY[0] - 740))
-    print(collumnsY)
-    
 
 
 def scoreboad(score):
