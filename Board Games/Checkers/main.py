@@ -14,7 +14,6 @@ def main():
     run = True
     clock = pygame.time.Clock()
     board = Board()
-    #white_pieces = Piece(ROWS, COLS, BLUE, WHITE)  #-- I dont actually know what Im doing
 
     while run:
         clock.tick(FPS)
@@ -27,8 +26,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pass
 
-        #white_pieces.draw(WIN) #-- I dont actually know what Im doing
-        board.draw_squares(WIN)
+        board.draw(WIN)
         pygame.display.update()
 
     pygame.quit()

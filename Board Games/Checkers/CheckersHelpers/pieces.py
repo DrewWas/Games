@@ -1,10 +1,10 @@
 import pygame
-from .constants import BLUE, WHITE, SQUARE_SIZE
+from .constants import BLUE, WHITE, SQUARE_SIZE, ROWS, COLS
 
 
 class Piece:
-    PADDING = 10
-    BORDER = 2
+    PADDING = 5
+    BORDER = 5
 
     def __init__(self, row, col, color, opp_color):
         self.row = row
@@ -12,14 +12,16 @@ class Piece:
         self.color = color
         self.opp_color = opp_color
         self.king = False
+        self.x = 0
+        self.y = 0
+        self.calc_pos()
 
+        """
         if self.color == BLUE:
             self.direction = -1
         else:
             self.direction = 1
-
-        self.x = 0
-        self.y = 0
+        """
 
 
     def calc_pos(self):
@@ -30,7 +32,7 @@ class Piece:
         self.king = True
     
     def draw(self, win):
-        rad = (SQUARE_SIZE // 2) - self.BORDER
+        rad = (SQUARE_SIZE // 2) - self.BORDER - 3
         pygame.draw.circle(win, self.opp_color, (self.x, self.y), rad + self.BORDER)
         pygame.draw.circle(win, self.color, (self.x, self.y), rad)
  
