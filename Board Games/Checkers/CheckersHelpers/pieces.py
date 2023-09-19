@@ -1,9 +1,9 @@
 import pygame
-from .constants import BLUE, WHITE, SQUARE_SIZE, ROWS, COLS
+from .constants import BLUE, WHITE, SQUARE_SIZE, ROWS, COLS, CROWN
 
 
 class Piece:
-    PADDING = 5
+    PADDING = 15
     BORDER = 5
 
     def __init__(self, row, col, color, opp_color):
@@ -32,10 +32,19 @@ class Piece:
         self.king = True
     
     def draw(self, win):
-        rad = (SQUARE_SIZE // 2) - self.BORDER - 3
+        rad = (SQUARE_SIZE // 2) - self.PADDING 
         pygame.draw.circle(win, self.opp_color, (self.x, self.y), rad + self.BORDER)
         pygame.draw.circle(win, self.color, (self.x, self.y), rad)
+        if self.king:
+            win.blit(CROWN, (self.x - (CROWN.get_width() // 2), self.y - (CROWN.get_height() // 2)))
  
+   
+    def move(self, row, col):
+        self.row = row
+        self.col = col
+        self.calc_pos()
+
+
     def __repr__(self):
         return str(self.color)
 
