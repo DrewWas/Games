@@ -9,8 +9,8 @@ The opponent is an ai that chooses a random number between 1 and 3
 """
 from random import randint
 
-def play():
-    total = 0
+def play(initial):
+    total = initial
     turn = 1
     while total < 21:
         print("\nScore: " + str(total))
@@ -18,7 +18,7 @@ def play():
             player_choice = ''.join(input("Add 1, 2, or 3: "))
             if int(player_choice) not in [1,2,3]:
                 print("You must choose either 1, 2, or 3")
-                return None
+                play(total)
             else: 
                 total += int(player_choice)
                 turn = -turn
@@ -37,5 +37,5 @@ def play():
     else:
         print("\nYou lose")            
 
-play()
+play(0)
 
