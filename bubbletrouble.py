@@ -7,17 +7,15 @@ from time import sleep
 TODO:
 * Homescreen and gameover screen
 
-* Arrow shoots up gradually
-
 * Nicer graphics and backgrounds
 
 * Player and ball collision detection
 
-* Arrow and ball collision detection
-
 * Ball split
 
 * Weird skipping/lagging
+
+* Implement levels which is basically just dying except next rendering a harder version (more balls) instead of a homescreen
 """
 
 
@@ -51,7 +49,15 @@ class Player:
         self.lives = 5
         self.alive = True    
         self.position = 700
+
         self.line = None
+        self.shooting = False
+        self.arrow_start_time = 0
+        self.arrow_current_length = 0
+        self.arrow_speed = 800
+        self.arrow_max_length = 800  
+        self.arrow_position = self.position
+
 
 
 
@@ -60,10 +66,25 @@ class Player:
 
 
 
-    def shoot(self, position):        
-        self.line = pygame.draw.line(SCREEN, gray, (position + 20, 710), (position + 20, 0))
+    def shoot(self):
+        if not self.shooting:
+            self.shooting = True
+            self.arrow_start_time = pygame.time.get_ticks()  # Get the current time
+            self.arrow_current_length = 0
+            self.arrow_position = self.position + 20
 
+    def draw_arrow(self):
+        if self.shooting:
+            current_time = pygame.time.get_ticks()
+            time_elapsed = (current_time - self.arrow_start_time) / 1000  # time in seconds
+            self.arrow_current_length = self.arrow_speed * time_elapsed
 
+            if self.arrow_current_length >= self.arrow_max_length:
+                self.arrow_current_length = self.arrow_max_length
+                self.shooting = False
+
+            end_y = 800 - self.arrow_current_length
+            self.line = pygame.draw.line(SCREEN, gray, (self.arrow_position, 800), (self.arrow_position, end_y), 5)
 
 
 class Balls:
@@ -117,6 +138,8 @@ def main():
     clock = pygame.time.Clock()
     player = Player()
 
+
+    # MAKE BETTER
     balls.append(Balls(2, 2, 3, 2))
 
     while running:
@@ -131,7 +154,7 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE]: 
-            player.shoot(player.position)
+            player.shoot()
 
         if keys[pygame.K_LEFT] and player.position > 5: 
             player.position -= 8  
@@ -140,23 +163,30 @@ def main():
             player.position += 8
 
 
+        player.draw_arrow()
         player.draw(player.position)
 
 
-
-        # TESTING!!
-        if keys[pygame.K_SPACE]:
-            balls[0].split() 
-
-
-        print(len(balls))
+        # TESTING
         for ball in balls:
             ball.draw()
+            if player.shooting:
+                if ball.x_pos - ball.radius <= player.arrow_position <= ball.x_pos + ball.radius: 
+                    if ball.y_pos <= player.arrow_current_length:
+                        print(ball.x_pos) 
 
-        #test_ball.draw()
+
+
+            # NOT WORKING!!!
+            #if ball.x_pos - ball.radius <= player.position + 40 <= ball.x_pos + ball.radius:
+            if ball.x_pos + ball.radius <= player.position + 40 <= ball.x_pos - ball.radius:
+                if ball.y_pos - ball.radius <= 90 <= ball.y_pos + ball.radius:
+                    print("HIT!!! \nGAME OVER!!")
+
+
 
         # DONE TESTING
-
+    
         pygame.display.update()
 
         clock.tick(FPS)
