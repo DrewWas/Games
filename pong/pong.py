@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+from random import randint, choice
 
 
 # Constants
@@ -17,16 +17,16 @@ class Game:
         self.running = True
         self.player1_score = 0
         self.player2_score = 0
-        #self.ball = Ball()
         pygame.init()
         pygame.font.init()
         MY_FONT = pygame.font.Font('fontpixel.ttf', 70)
         self.player1_pos = [10, randint(200, 500)] 
         self.player2_pos = [1470, randint(200, 500)] 
+        self.ball_pos = [750, 375]
+        self.ball = Ball(self.ball_pos)
         self.score = Score(MY_FONT)
 
     def start(self):
-
         # basic setup
         self.clock = pygame.time.Clock()
         self.SCREEN = pygame.display.set_mode((HEIGHT, WIDTH))
@@ -60,8 +60,18 @@ class Game:
                 self.player2_pos[1] += 7 
                 player2.update(RED, self.player2_pos)
 
+            if self.ball_pos[0] < 5 or self.ball_pos[0] > 1495:
+                self.ball.x_velo *= -1 
+
+            if self.ball_pos[1] < 5 or self.ball_pos[1] > 745:
+                self.ball.y_velo *= -1 
+
+            self.ball_pos[0] += 7 * self.ball.x_velo
+            self.ball_pos[1] += 7 * self.ball.y_velo 
+
             player1.update(BLUE, self.player1_pos)
             player2.update(RED, self.player2_pos)
+            self.ball.update(self.ball_pos)
 
 
 
@@ -77,7 +87,17 @@ class Game:
 
 
 
-#class Ball:
+class Ball:
+
+    def __init__(self, ball_pos):
+        self.pos = ball_pos
+        self.x_velo = choice([-1,1]) 
+        self.y_velo = choice([-1,1]) 
+
+    def update(self, ball_pos):
+        # change movement conditions
+        pygame.draw.circle(game.SCREEN, WHITE, ball_pos, 12)
+
 
 
 
