@@ -19,12 +19,12 @@ class Game:
         self.player2_score = 0
         pygame.init()
         pygame.font.init()
-        MY_FONT = pygame.font.Font('fontpixel.ttf', 70)
+        self.MY_FONT = pygame.font.Font('fontpixel.ttf', 70)
         self.player1_pos = [10, randint(200, 500)] 
         self.player2_pos = [1470, randint(200, 500)] 
         self.ball_pos = [750, 375]
         self.ball = Ball(self.ball_pos)
-        self.score = Score(MY_FONT)
+        self.score = Score(self.MY_FONT)
 
     def start(self):
         # basic setup
@@ -60,14 +60,43 @@ class Game:
                 self.player2_pos[1] += 7 
                 player2.update(RED, self.player2_pos)
 
-            if self.ball_pos[0] < 5 or self.ball_pos[0] > 1495:
-                self.ball.x_velo *= -1 
+            # Paddle deflect logic
+            if self.ball_pos[0] < 45:
+                if self.player1_pos[1] < self.ball_pos[1] < self.player1_pos[1] + 120:
+                    self.ball.x_velo *= -1 
 
+            elif self.ball_pos[0] > 1455: 
+                if self.player2_pos[1] < self.ball_pos[1] < self.player2_pos[1] + 120:
+                    self.ball.x_velo *= -1 
+
+
+            # Bounce off roof/floor logic 
             if self.ball_pos[1] < 5 or self.ball_pos[1] > 745:
                 self.ball.y_velo *= -1 
 
             self.ball_pos[0] += 7 * self.ball.x_velo
             self.ball_pos[1] += 7 * self.ball.y_velo 
+
+
+            # Check if a player scores
+            if self.ball_pos[0] > 1495:
+                self.player1_score += 1
+                self.ball_pos[0] = 750 
+                self.ball_pos[1] = 375 
+                self.ball.x_velo *= -1
+
+            if self.ball_pos[0] < 5:
+                self.player2_score += 1 
+                self.ball_pos[0] = 750 
+                self.ball_pos[1] = 375 
+                self.ball.x_velo *= -1
+
+
+
+            # Game over logic
+            if self.player2_score > 1 or self.player1_score > 10:  # fix back to 10
+                self.gameOver()
+                return None
 
             player1.update(BLUE, self.player1_pos)
             player2.update(RED, self.player2_pos)
@@ -82,8 +111,22 @@ class Game:
             self.clock.tick(FPS)
             self.SCREEN.fill(BLACK)
 
+
+
         pygame.quit()     
 
+
+    def gameOver(self):
+
+
+        self.SCREEN.fill(BLACK)
+        gameOverText1 = self.MY_FONT.render("Game Over : (", False, WHITE)
+        gameOverText2 = self.MY_FONT.render("Click Spacebar to play again or q to exit", False, WHITE)
+
+        game.SCREEN.blit(gameOverText1, (700, 250))
+        game.SCREEN.blit(gameOverText2, (700, 450))
+
+        pygame.display.update()
 
 
 
@@ -121,7 +164,7 @@ class Score:
         
     def draw_score(self, player1_score, player2_score):
         
-        player1_surface= self.font.render(str(player1_score), False, WHITE)
+        player1_surface = self.font.render(str(player1_score), False, WHITE)
         player2_surface = self.font.render(str(player2_score), False, WHITE)
 
         game.SCREEN.blit(player1_surface, (350,50))
