@@ -122,6 +122,7 @@ class Game:
     def gameOver(self):
 
         gameOverScreen = True
+        keys = pygame.key.get_pressed()
 
         while gameOverScreen:
             self.SCREEN.fill(BLACK)
@@ -134,7 +135,7 @@ class Game:
             game.SCREEN.blit(gameOverText3, (700, 650))
 
             
-            if input("HERE: ") == "p":
+            if keys[pygame.K_SPACE]: 
                 print("SPACE PRESSED")
                 gameOverScreen = False
 
