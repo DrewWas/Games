@@ -101,14 +101,16 @@ class Game:
                 self.player2_pos[1] += 15 
                 player2.update(RED, self.player2_pos)
 
-            # Paddle deflect logic (added additional margin of error of 10 pixels) 
-            if self.ball_pos[0] < 50:
-                if self.player1_pos[1] - 5 < self.ball_pos[1] < self.player1_pos[1] + 120 + 5:
+            # Paddle deflect logic (added additional margin of error of 20 pixels) 
+            if self.ball_pos[0] < 40:
+                if self.player1_pos[1] - 10 < self.ball_pos[1] < self.player1_pos[1] + 120 + 10:
                     self.ball.x_velo *= -1 
+                    self.ball.pos[0] += 10 
 
-            elif self.ball_pos[0] > 1450: 
-                if self.player2_pos[1] - 5 < self.ball_pos[1] < self.player2_pos[1] + 120 + 5:
+            elif self.ball_pos[0] > 1460: 
+                if self.player2_pos[1] - 10 < self.ball_pos[1] < self.player2_pos[1] + 120 + 10:
                     self.ball.x_velo *= -1 
+                    self.ball.pos[0] -= 10 
 
 
             # Bounce off roof/floor logic 
@@ -121,13 +123,14 @@ class Game:
 
 
             # Check if a player scores
-            if self.ball_pos[0] > 1495:
+            if self.ball_pos[0] > 1500:
                 self.player1_score += 1
                 self.ball_pos[0] = 750 
                 self.ball_pos[1] = 375 
                 self.ball.x_velo *= -1
 
-            if self.ball_pos[0] < 5:
+            #if self.ball_pos[0] < 5:
+            if self.ball_pos[0] < 0:
                 self.player2_score += 1 
                 self.ball_pos[0] = 750 
                 self.ball_pos[1] = 375 
