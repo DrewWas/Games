@@ -95,8 +95,9 @@ class Game:
 
             # Game over logic
             if self.player2_score > 1 or self.player1_score > 10:  # fix back to 10
-                self.gameOver()
-                return None
+                #self.gameOver()
+                print("EXITING LOOP")
+                break
 
             player1.update(BLUE, self.player1_pos)
             player2.update(RED, self.player2_pos)
@@ -112,21 +113,38 @@ class Game:
             self.SCREEN.fill(BLACK)
 
 
+        # Game over logic
+        self.gameOver()
 
         pygame.quit()     
 
 
     def gameOver(self):
 
+        gameOverScreen = True
 
-        self.SCREEN.fill(BLACK)
-        gameOverText1 = self.MY_FONT.render("Game Over : (", False, WHITE)
-        gameOverText2 = self.MY_FONT.render("Click Spacebar to play again or q to exit", False, WHITE)
+        while gameOverScreen:
+            self.SCREEN.fill(BLACK)
+            gameOverText1 = self.MY_FONT.render("Game Over : (", False, WHITE)
+            gameOverText2 = self.MY_FONT.render("Click Spacebar to play again or q to exit", False, WHITE)
+            gameOverText3 = self.MY_FONT.render("Select a number to play again with a new difficulty", False, WHITE)
 
-        game.SCREEN.blit(gameOverText1, (700, 250))
-        game.SCREEN.blit(gameOverText2, (700, 450))
+            game.SCREEN.blit(gameOverText1, (700, 250))
+            game.SCREEN.blit(gameOverText2, (700, 450))
+            game.SCREEN.blit(gameOverText3, (700, 650))
 
-        pygame.display.update()
+            
+            if input("HERE: ") == "p":
+                print("SPACE PRESSED")
+                gameOverScreen = False
+
+            pygame.display.update()
+
+        print("EXITING LOOP IN gameOver func")
+
+
+        # exited while loop 
+        pygame.quit()
 
 
 
@@ -153,7 +171,6 @@ class Paddle:
         self.player_pos = pos
         pygame.draw.rect(game.SCREEN, color, (self.player_pos[0], self.player_pos[1], 20, 120))
 
-        print(self.player_pos)
 
 
 class Score:
