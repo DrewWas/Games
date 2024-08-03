@@ -15,7 +15,8 @@ class Game:
 
     def __init__(self):
         self.running = True
-        self.difficulty = 10 
+        self.difficulty = 12 
+        self.level = 1
         self.player1_score = 0
         self.player2_score = 0
         pygame.init()
@@ -35,9 +36,34 @@ class Game:
         self.ball = Ball(self.ball_pos)
         self.score = Score(self.MY_FONT_LARGE)
 
+    def homescreen(self):
+        runHomescreen = True
+        while runHomescreen:
+            self.SCREEN.fill(BLACK)
+            gameOverText1 = self.MY_FONT_LARGE.render("Welcome To PythonPong!", False, BLUE)
+            gameOverText2 = self.MY_FONT_MED.render("Click Spacebar to play", False, WHITE)
+            gameOverText3 = self.MY_FONT_MED.render("Difficulty: " + str(self.level), False, RED)
+
+            game.SCREEN.blit(gameOverText1, (300, 250))
+            game.SCREEN.blit(gameOverText2, (500, 400))
+            game.SCREEN.blit(gameOverText3, (600, 475))
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            keys = pygame.key.get_pressed()
+            
+            if keys[pygame.K_SPACE]: 
+                runHomescreen = False
+
+            pygame.display.update()
+
+
     def start(self):
         # basic setup
         self.clock = pygame.time.Clock()
+        self.newGame = True
         self.SCREEN = pygame.display.set_mode((HEIGHT, WIDTH))
         pygame.display.set_caption("python pong")
         
@@ -46,6 +72,12 @@ class Game:
 
         # main event loop
         while self.running:
+
+
+            if self.newGame:
+                self.homescreen()
+                self.newGame = False
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -54,28 +86,28 @@ class Game:
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_w] and self.player1_pos[1] > 5:
-                self.player1_pos[1] -= 12 
+                self.player1_pos[1] -= 15 
                 player1.update(BLUE, self.player1_pos)
 
             if keys[pygame.K_s] and self.player1_pos[1] < 620:
-                self.player1_pos[1] += 12 
+                self.player1_pos[1] += 15 
                 player1.update(BLUE, self.player1_pos)
 
             if keys[pygame.K_UP] and self.player2_pos[1] > 5:
-                self.player2_pos[1] -= 12 
+                self.player2_pos[1] -= 15 
                 player2.update(RED, self.player2_pos)
 
             if keys[pygame.K_DOWN] and self.player2_pos[1] < 620:
-                self.player2_pos[1] += 12 
+                self.player2_pos[1] += 15 
                 player2.update(RED, self.player2_pos)
 
-            # Paddle deflect logic
-            if self.ball_pos[0] < 45:
-                if self.player1_pos[1] < self.ball_pos[1] < self.player1_pos[1] + 120:
+            # Paddle deflect logic (added additional margin of error of 10 pixels) 
+            if self.ball_pos[0] < 50:
+                if self.player1_pos[1] - 5 < self.ball_pos[1] < self.player1_pos[1] + 120 + 5:
                     self.ball.x_velo *= -1 
 
-            elif self.ball_pos[0] > 1455: 
-                if self.player2_pos[1] < self.ball_pos[1] < self.player2_pos[1] + 120:
+            elif self.ball_pos[0] > 1450: 
+                if self.player2_pos[1] - 5 < self.ball_pos[1] < self.player2_pos[1] + 120 + 5:
                     self.ball.x_velo *= -1 
 
 
@@ -83,7 +115,7 @@ class Game:
             if self.ball_pos[1] < 5 or self.ball_pos[1] > 745:
                 self.ball.y_velo *= -1 
 
-            # self.difficulty changes the speed of the ball (defaulted to 10)
+            # self.difficulty changes the speed of the ball (defaulted to 12)
             self.ball_pos[0] += self.difficulty * self.ball.x_velo
             self.ball_pos[1] += self.difficulty * self.ball.y_velo 
 
@@ -104,7 +136,7 @@ class Game:
 
 
             # Game over logic
-            if self.player2_score > 1 or self.player1_score > 10:  # fix back to 10
+            if self.player2_score > 10 or self.player1_score > 10:  
                 self.gameOver()
                 self.resetGame()
                 continue
@@ -123,9 +155,6 @@ class Game:
             self.SCREEN.fill(BLACK)
 
 
-        # Game over logic
-        #self.start()
-
 
 
     def gameOver(self):
@@ -135,13 +164,13 @@ class Game:
 
         while gameOverScreen:
             self.SCREEN.fill(BLACK)
-            gameOverText1 = self.MY_FONT_LARGE.render("Game Over : (", False, WHITE)
-            gameOverText2 = self.MY_FONT_MED.render("Click Spacebar to play again or q to exit", False, WHITE)
-            gameOverText3 = self.MY_FONT_MED.render("Select a number to play again with a new difficulty", False, WHITE)
+            gameOverText1 = self.MY_FONT_LARGE.render("Game Over : (", False, RED)
+            gameOverText2 = self.MY_FONT_MED.render("Click Spacebar to play again or q to exit", False, BLUE)
+            gameOverText3 = self.MY_FONT_MED.render("Select a number (1-3) to play again with a new difficulty", False, WHITE)
 
             game.SCREEN.blit(gameOverText1, (500, 250))
             game.SCREEN.blit(gameOverText2, (335, 400))
-            game.SCREEN.blit(gameOverText3, (240, 500))
+            game.SCREEN.blit(gameOverText3, (210, 500))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -157,6 +186,32 @@ class Game:
             if keys[pygame.K_SPACE]:
                 self.player1_score = 0
                 self.player2_score = 0
+                self.newGame = True
+                gameOverScreen = False
+
+            if keys[pygame.K_1]:
+                self.difficulty = 12 
+                self.level = 1
+                self.player1_score = 0
+                self.player2_score = 0
+                self.newGame = True
+                gameOverScreen = False
+
+            if keys[pygame.K_2]:
+                self.difficulty = 15 
+                self.level = 2 
+                self.player1_score = 0
+                self.player2_score = 0
+                self.newGame = True
+                gameOverScreen = False
+
+
+            if keys[pygame.K_3]:
+                self.difficulty = 18 
+                self.level = 3
+                self.player1_score = 0
+                self.player2_score = 0
+                self.newGame = True
                 gameOverScreen = False
 
             pygame.display.update()
