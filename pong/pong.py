@@ -41,7 +41,7 @@ class Game:
         while runHomescreen:
             self.SCREEN.fill(BLACK)
             gameOverText1 = self.MY_FONT_LARGE.render("Welcome To PythonPong!", False, BLUE)
-            gameOverText2 = self.MY_FONT_MED.render("Click Spacebar to play", False, WHITE)
+            gameOverText2 = self.MY_FONT_MED.render("Click Spacebar To Play", False, WHITE)
             gameOverText3 = self.MY_FONT_MED.render("Difficulty: " + str(self.level), False, RED)
 
             game.SCREEN.blit(gameOverText1, (300, 250))

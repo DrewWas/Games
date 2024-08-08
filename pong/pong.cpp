@@ -9,6 +9,7 @@ int main() {
     // Constants
     bool gameStarted = false;
     bool gameOver = false;
+    int DIFFICULTY = 1;
 
     // Create window 
     sf::RenderWindow window(sf::VideoMode(1500,750), "Pong C++");
@@ -80,24 +81,48 @@ int main() {
         }
 
         // Start game screen
-        while (!gameStarted) { 
+        if (!gameStarted) {
 
             sf::Text WelcomeText1;
             WelcomeText1.setFont(pixel_font);
             WelcomeText1.setString("Welcome to C++ Pong");
             WelcomeText1.setCharacterSize(70);
-            WelcomeText1.setPosition(300, 250);
-
+            WelcomeText1.setPosition(350, 250);
             WelcomeText1.setFillColor(sf::Color(0, 138, 255));
 
+            sf::Text WelcomeText2;
+            WelcomeText2.setFont(pixel_font);
+            WelcomeText2.setString("Click Spacebar To Play");
+            WelcomeText2.setCharacterSize(40);
+            WelcomeText2.setPosition(500, 400);
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                gameStarted = true;
+            sf::Text WelcomeText3;
+            WelcomeText3.setFont(pixel_font);
+            WelcomeText3.setString("Difficulty: " + std::to_string(DIFFICULTY));
+            WelcomeText3.setCharacterSize(40);
+            WelcomeText3.setPosition(620, 475);
+            WelcomeText3.setFillColor(sf::Color::Red);
+
+            while (!gameStarted) {
+                while (window.pollEvent(event)) {
+                    if (event.type == sf::Event::Closed) {
+                        window.close();
+                        return 0;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                    gameStarted = true;
+                }
+
+                window.clear(sf::Color::Black);
+                window.draw(WelcomeText1);
+                window.draw(WelcomeText2);
+                window.draw(WelcomeText3);
+                window.display();
+
             }
 
-            window.clear(sf::Color::Black);
-            window.draw(WelcomeText1);
-            window.display();
         }
 
 
