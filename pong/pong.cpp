@@ -6,6 +6,10 @@
 int main() {
 
 
+    // Constants
+    bool gameStarted = false;
+    bool gameOver = false;
+
     // Create window 
     sf::RenderWindow window(sf::VideoMode(1500,750), "Pong C++");
     window.setFramerateLimit(60);
@@ -73,8 +77,29 @@ int main() {
                 window.close();
             }
 
-
         }
+
+        // Start game screen
+        while (!gameStarted) { 
+
+            sf::Text WelcomeText1;
+            WelcomeText1.setFont(pixel_font);
+            WelcomeText1.setString("Welcome to C++ Pong");
+            WelcomeText1.setCharacterSize(70);
+            WelcomeText1.setPosition(300, 250);
+
+            WelcomeText1.setFillColor(sf::Color(0, 138, 255));
+
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                gameStarted = true;
+            }
+
+            window.clear(sf::Color::Black);
+            window.draw(WelcomeText1);
+            window.display();
+        }
+
 
         // Ball movement and logic
         ball_pos.x += ball_x_velo;
@@ -161,6 +186,7 @@ int main() {
 
 
 }
+
 
 
 
