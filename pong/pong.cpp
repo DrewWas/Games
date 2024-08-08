@@ -46,7 +46,7 @@ int main() {
     int player2_score = 0;
 
     sf::Font pixel_font;
-    pixel_font.loadFromFile("fontpixel.ttf");
+    pixel_font.loadFromFile("Helpers/fontpixel.ttf");
 
 
     sf::Text player1_score_text;

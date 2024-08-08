@@ -21,8 +21,8 @@ class Game:
         self.player2_score = 0
         pygame.init()
         pygame.font.init()
-        self.MY_FONT_LARGE = pygame.font.Font('fontpixel.ttf', 70)
-        self.MY_FONT_MED = pygame.font.Font('fontpixel.ttf', 40)
+        self.MY_FONT_LARGE = pygame.font.Font('Helpers/fontpixel.ttf', 70)
+        self.MY_FONT_MED = pygame.font.Font('Helpers/fontpixel.ttf', 40)
         self.player1_pos = [10, randint(200, 500)] 
         self.player2_pos = [1470, randint(200, 500)] 
         self.ball_pos = [750, 375]
