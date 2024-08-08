@@ -45,6 +45,24 @@ int main() {
     int player1_score = 0;
     int player2_score = 0;
 
+    sf::Font pixel_font;
+    pixel_font.loadFromFile("fontpixel.ttf");
+
+
+    sf::Text player1_score_text;
+    player1_score_text.setFont(pixel_font);
+    player1_score_text.setString(std::to_string(player1_score));
+    player1_score_text.setCharacterSize(70);
+    player1_score_text.setPosition(350, 50);
+
+    sf::Text player2_score_text;
+    player2_score_text.setFont(pixel_font);
+    player2_score_text.setString(std::to_string(player2_score));
+    player2_score_text.setCharacterSize(70);
+    player2_score_text.setPosition(1050, 50);
+    
+    
+
 
     // Main game loop
     while (window.isOpen()) {
@@ -87,31 +105,34 @@ int main() {
         }
 
 
-
-        std::cout << "Player 1 y: " << player1_pos.y << "\n";
-        std::cout << "Player 2 y: " << player2_pos.y << "\n";
         // Ball paddle/wall collision logic
         if (ball_pos.x < 30) {
 
-            if (player1_pos.y - 10 < ball_pos.y < player1_pos.y + 120 + 10) {
+            if (player1_pos.y - 10 < ball_pos.y && ball_pos.y < player1_pos.y + 120 + 10) { 
                 ball_pos.x += 10;
                 ball_x_velo *= -1;
             }
 
             else if (ball_pos.x < -50) {
                 ball_pos.x = 375;
+                ball_x_velo *= -1;
+                player2_score += 1;
+                player2_score_text.setString(std::to_string(player2_score));
             }
         }
     
         else if (ball_pos.x > 1460) {
 
-            if (player2_pos.y - 10 < ball_pos.y < player2_pos.y + 120 + 10) {
+            if (player2_pos.y - 10 < ball_pos.y && ball_pos.y < player2_pos.y + 120 + 10) { 
                 ball_pos.x -= 10;
                 ball_x_velo *= -1;
             }
 
             else if (ball_pos.x > 1550) {
                 ball_pos.x = 375;
+                ball_x_velo *= -1;
+                player1_score += 1;
+                player1_score_text.setString(std::to_string(player1_score));
             }
         }
 
@@ -128,6 +149,8 @@ int main() {
         window.draw(player1);
         window.draw(player2);
         window.draw(ball);
+        window.draw(player1_score_text);
+        window.draw(player2_score_text);
         window.display();
 
     }
