@@ -3,16 +3,101 @@
 #include <random>
 #include <ctime>
 
+
+// Constants (put into __init__ method??)
+bool gameStarted = false;
+bool gameOver = false;
+int DIFFICULTY = 1;
+int player1_score = 0; 
+int player2_score = 0; 
+
+sf::RenderWindow window(sf::VideoMode(1500,750), "Pong C++");
+sf::Font pixel_font;
+
+
+// Create gameOverScreen
+void gameOverScreen() {
+    while (gameOver) {
+        sf::Event event;
+
+        window.clear(sf::Color::Black);
+        pixel_font.loadFromFile("Helpers/fontpixel.ttf");
+
+        sf::Text GameOverText1;
+        GameOverText1.setFont(pixel_font);
+        GameOverText1.setString("Game Over :(");
+        GameOverText1.setCharacterSize(70);
+        GameOverText1.setPosition(500, 250);
+        GameOverText1.setFillColor(sf::Color::Red);
+
+        sf::Text GameOverText2;
+        GameOverText2.setFont(pixel_font);
+        GameOverText2.setString("Click Spacebar to play again or q to exit");
+        GameOverText2.setCharacterSize(40);
+        GameOverText2.setPosition(335, 400);
+        GameOverText2.setFillColor(sf::Color(0, 138, 255));
+
+        sf::Text GameOverText3;
+        GameOverText3.setFont(pixel_font);
+        GameOverText3.setString("Select a number (1-3) to play again with a new difficulty");
+        GameOverText3.setCharacterSize(40);
+        GameOverText3.setPosition(210, 500);
+        GameOverText3.setFillColor(sf::Color::White);
+
+        window.draw(GameOverText1);
+        window.draw(GameOverText2);
+        window.draw(GameOverText3);
+        window.display();
+
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+                window.close();
+                return;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                gameStarted = true;
+                break;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+                DIFFICULTY = 1;
+                gameStarted = true;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+                DIFFICULTY = 2;
+                gameStarted = true;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+                DIFFICULTY = 3; 
+                gameStarted = true;
+            }
+        
+        }
+    }
+}
+
+
+
+void resetGame() {
+    player1_score = 0;
+    player2_score = 0;
+    //ball_x_velo = (adjust with difficulty)
+    //ball_y_velo = (adjust with difficulty)
+}
+
+
+
 int main() {
 
-
-    // Constants
-    bool gameStarted = false;
-    bool gameOver = false;
-    int DIFFICULTY = 1;
-
     // Create window 
-    sf::RenderWindow window(sf::VideoMode(1500,750), "Pong C++");
     window.setFramerateLimit(60);
 
 
@@ -38,22 +123,14 @@ int main() {
     player2.setFillColor(sf::Color(0, 138, 255)); // (0, 138, 255) is the RGB for a cleaner shade of blue
 
     // Create ball
-    int ball_x_velo = 12;      // Change to be based on difficulty, which starts at 12 (this is hardcoded temporarily)
-    int ball_y_velo = 12;
+    int ball_x_velo = 13;      // Change to be based on difficulty, which starts at 12 (this is hardcoded temporarily)
+    int ball_y_velo = 13;
     sf::CircleShape ball(12);
     sf::Vector2f ball_pos(750, 375);
     ball.setPosition(ball_pos);
     
 
-
-    // Create scores and print to screen
-    int player1_score = 0;
-    int player2_score = 0;
-
-    sf::Font pixel_font;
     pixel_font.loadFromFile("Helpers/fontpixel.ttf");
-
-
     sf::Text player1_score_text;
     player1_score_text.setFont(pixel_font);
     player1_score_text.setString(std::to_string(player1_score));
@@ -192,7 +269,13 @@ int main() {
 
         ball.setPosition(ball_pos);
 
-
+        // Check player score
+        if (player1_score >= 1 || player2_score >= 1) { // REVERT BACK TO 11!!
+            gameOver = true;
+            gameOverScreen();
+            resetGame();
+            continue;
+        }
 
 
         window.clear(sf::Color::Black);
@@ -210,7 +293,9 @@ int main() {
     return 0;
 
 
+
 }
+
 
 
 
