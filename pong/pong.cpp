@@ -13,6 +13,8 @@ int player2_score = 0;
 
 sf::RenderWindow window(sf::VideoMode(1500,750), "Pong C++");
 sf::Font pixel_font;
+sf::Text player1_score_text;
+sf::Text player2_score_text;
 
 
 // Create gameOverScreen
@@ -62,22 +64,25 @@ void gameOverScreen() {
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 gameStarted = true;
-                break;
+                gameOver = false;
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
                 DIFFICULTY = 1;
                 gameStarted = true;
+                gameOver = false;
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
                 DIFFICULTY = 2;
                 gameStarted = true;
+                gameOver = false;
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
                 DIFFICULTY = 3; 
                 gameStarted = true;
+                gameOver = false;
             }
         
         }
@@ -88,7 +93,10 @@ void gameOverScreen() {
 
 void resetGame() {
     player1_score = 0;
+    player1_score_text.setString(std::to_string(player1_score));
+
     player2_score = 0;
+    player2_score_text.setString(std::to_string(player2_score));
     //ball_x_velo = (adjust with difficulty)
     //ball_y_velo = (adjust with difficulty)
 }
@@ -129,15 +137,13 @@ int main() {
     sf::Vector2f ball_pos(750, 375);
     ball.setPosition(ball_pos);
     
-
     pixel_font.loadFromFile("Helpers/fontpixel.ttf");
-    sf::Text player1_score_text;
+
     player1_score_text.setFont(pixel_font);
     player1_score_text.setString(std::to_string(player1_score));
     player1_score_text.setCharacterSize(70);
     player1_score_text.setPosition(350, 50);
 
-    sf::Text player2_score_text;
     player2_score_text.setFont(pixel_font);
     player2_score_text.setString(std::to_string(player2_score));
     player2_score_text.setCharacterSize(70);
@@ -270,10 +276,11 @@ int main() {
         ball.setPosition(ball_pos);
 
         // Check player score
-        if (player1_score >= 1 || player2_score >= 1) { // REVERT BACK TO 11!!
+        if (player1_score >= 3 || player2_score >= 3) { // REVERT BACK TO 11!!
             gameOver = true;
             gameOverScreen();
             resetGame();
+            gameStarted = false;
             continue;
         }
 
