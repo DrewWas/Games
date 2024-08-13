@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <ctime>
+#include <unistd.h>
 
 
 // Constants (put into __init__ method??)
@@ -16,11 +17,61 @@ sf::Font pixel_font;
 sf::Text player1_score_text;
 sf::Text player2_score_text;
 
+sf::Event event;
+
+// Create homescreen
+void homescreen() { 
+
+    while (!gameStarted) {
+        window.clear(sf::Color::Black);
+
+        sf::Text WelcomeText1;
+        WelcomeText1.setFont(pixel_font);
+        WelcomeText1.setString("Welcome to C++ Pong");
+        WelcomeText1.setCharacterSize(70);
+        WelcomeText1.setPosition(350, 250);
+        WelcomeText1.setFillColor(sf::Color(0, 138, 255));
+
+        sf::Text WelcomeText2;
+        WelcomeText2.setFont(pixel_font);
+        WelcomeText2.setString("Click Spacebar To Play");
+        WelcomeText2.setCharacterSize(40);
+        WelcomeText2.setPosition(500, 400);
+
+        sf::Text WelcomeText3;
+        WelcomeText3.setFont(pixel_font);
+        WelcomeText3.setString("Difficulty: " + std::to_string(DIFFICULTY));
+        WelcomeText3.setCharacterSize(40);
+        WelcomeText3.setPosition(620, 475);
+        WelcomeText3.setFillColor(sf::Color::Red);
+
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                    return;
+                }
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+                window.close();
+                return;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                gameStarted = true;
+            }
+
+            window.draw(WelcomeText1);
+            window.draw(WelcomeText2);
+            window.draw(WelcomeText3);
+            window.display();
+        }
+}
+
 
 // Create gameOverScreen
 void gameOverScreen() {
     while (gameOver) {
-        sf::Event event;
 
         window.clear(sf::Color::Black);
         pixel_font.loadFromFile("Helpers/fontpixel.ttf");
@@ -63,26 +114,28 @@ void gameOverScreen() {
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                gameStarted = true;
-                gameOver = false;
+                gameOver = false; 
+                int sleep = 200000; // This sleep is so that when space is pressed the homescreen is not accidentally skipped 
+                usleep(sleep);
+                homescreen();  
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
                 DIFFICULTY = 1;
-                gameStarted = true;
                 gameOver = false;
+                homescreen();
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
                 DIFFICULTY = 2;
-                gameStarted = true;
                 gameOver = false;
+                homescreen();
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
                 DIFFICULTY = 3; 
-                gameStarted = true;
                 gameOver = false;
+                homescreen();
             }
         
         }
@@ -166,45 +219,7 @@ int main() {
         // Start game screen
         if (!gameStarted) {
 
-            sf::Text WelcomeText1;
-            WelcomeText1.setFont(pixel_font);
-            WelcomeText1.setString("Welcome to C++ Pong");
-            WelcomeText1.setCharacterSize(70);
-            WelcomeText1.setPosition(350, 250);
-            WelcomeText1.setFillColor(sf::Color(0, 138, 255));
-
-            sf::Text WelcomeText2;
-            WelcomeText2.setFont(pixel_font);
-            WelcomeText2.setString("Click Spacebar To Play");
-            WelcomeText2.setCharacterSize(40);
-            WelcomeText2.setPosition(500, 400);
-
-            sf::Text WelcomeText3;
-            WelcomeText3.setFont(pixel_font);
-            WelcomeText3.setString("Difficulty: " + std::to_string(DIFFICULTY));
-            WelcomeText3.setCharacterSize(40);
-            WelcomeText3.setPosition(620, 475);
-            WelcomeText3.setFillColor(sf::Color::Red);
-
-            while (!gameStarted) {
-                while (window.pollEvent(event)) {
-                    if (event.type == sf::Event::Closed) {
-                        window.close();
-                        return 0;
-                    }
-                }
-
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                    gameStarted = true;
-                }
-
-                window.clear(sf::Color::Black);
-                window.draw(WelcomeText1);
-                window.draw(WelcomeText2);
-                window.draw(WelcomeText3);
-                window.display();
-
-            }
+            homescreen();
 
         }
 
