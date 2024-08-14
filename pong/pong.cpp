@@ -9,8 +9,9 @@
 bool gameStarted = false;
 bool gameOver = false;
 int DIFFICULTY = 1; 
-int ball_x_velo= 13;
+int ball_x_velo = 13;
 int ball_y_velo = 13;
+
 int player1_score = 0; 
 int player2_score = 0; 
 
@@ -258,14 +259,15 @@ int main() {
 
 
         // Ball paddle/wall collision logic
-        if (ball_pos.x < 30) {
+        if (ball_pos.x < 20) {
 
-            if (player1_pos.y - 5 < ball_pos.y && ball_pos.y < player1_pos.y + 120 + 5) { 
+            if (player1_pos.y - 10 < ball_pos.y && ball_pos.y < player1_pos.y + 120 + 10) { 
                 ball_pos.x += 20;
                 ball_x_velo *= -1;
             }
 
-            else if (ball_pos.x < 10) {
+            //else if (ball_pos.x < 30) {
+            else {
                 ball_pos.x = 750;
                 ball_pos.y = 375;
                 ball_x_velo *= -1;
@@ -274,14 +276,15 @@ int main() {
             }
         }
     
-        else if (ball_pos.x > 1460) {
+        else if (ball_pos.x > 1480) {
 
-            if (player2_pos.y - 5 < ball_pos.y && ball_pos.y < player2_pos.y + 120 + 5) { 
-                ball_pos.x -= 20;
+            if (player2_pos.y - 10 < ball_pos.y && ball_pos.y < player2_pos.y + 120 + 10) { 
+                ball_pos.x -= 40;
                 ball_x_velo *= -1;
             }
 
-            else if (ball_pos.x > 1570) {
+            //else if (ball_pos.x > 1570) {
+            else {
                 ball_pos.x = 750;
                 ball_pos.y = 375;
                 ball_x_velo *= -1;
