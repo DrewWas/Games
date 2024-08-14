@@ -1,0 +1,5 @@
+
+* memory?
+
+* zigzagging on paddle
+

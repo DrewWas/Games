@@ -8,7 +8,9 @@
 // Constants (put into __init__ method??)
 bool gameStarted = false;
 bool gameOver = false;
-int DIFFICULTY = 1;
+int DIFFICULTY = 1; 
+int ball_x_velo= 13;
+int ball_y_velo = 13;
 int player1_score = 0; 
 int player2_score = 0; 
 
@@ -122,18 +124,24 @@ void gameOverScreen() {
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
                 DIFFICULTY = 1;
+                ball_x_velo= 13;
+                ball_y_velo= 13;
                 gameOver = false;
                 homescreen();
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
                 DIFFICULTY = 2;
+                ball_x_velo = 15;
+                ball_y_velo = 15;
                 gameOver = false;
                 homescreen();
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
                 DIFFICULTY = 3; 
+                ball_x_velo = 18;
+                ball_y_velo = 18;
                 gameOver = false;
                 homescreen();
             }
@@ -150,8 +158,6 @@ void resetGame() {
 
     player2_score = 0;
     player2_score_text.setString(std::to_string(player2_score));
-    //ball_x_velo = (adjust with difficulty)
-    //ball_y_velo = (adjust with difficulty)
 }
 
 
@@ -184,8 +190,6 @@ int main() {
     player2.setFillColor(sf::Color(0, 138, 255)); // (0, 138, 255) is the RGB for a cleaner shade of blue
 
     // Create ball
-    int ball_x_velo = 13;      // Change to be based on difficulty, which starts at 12 (this is hardcoded temporarily)
-    int ball_y_velo = 13;
     sf::CircleShape ball(12);
     sf::Vector2f ball_pos(750, 375);
     ball.setPosition(ball_pos);
@@ -232,23 +236,23 @@ int main() {
 
         // Player 1 movements
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && player1_pos.y < 620) { 
-            player1_pos.y += 12;
+            player1_pos.y += 15;
             player1.setPosition(player1_pos);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && player1_pos.y > 10) { 
-            player1_pos.y -= 12;
+            player1_pos.y -= 15;
             player1.setPosition(player1_pos);
         }
 
         // Player 2 movement
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && player2_pos.y < 620) { 
-            player2_pos.y += 12;
+            player2_pos.y += 15;
             player2.setPosition(player2_pos);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && player2_pos.y > 10) { 
-            player2_pos.y -= 12;
+            player2_pos.y -= 15;
             player2.setPosition(player2_pos);
         }
 
@@ -256,13 +260,14 @@ int main() {
         // Ball paddle/wall collision logic
         if (ball_pos.x < 30) {
 
-            if (player1_pos.y - 10 < ball_pos.y && ball_pos.y < player1_pos.y + 120 + 10) { 
-                ball_pos.x += 10;
+            if (player1_pos.y - 5 < ball_pos.y && ball_pos.y < player1_pos.y + 120 + 5) { 
+                ball_pos.x += 20;
                 ball_x_velo *= -1;
             }
 
-            else if (ball_pos.x < -50) {
-                ball_pos.x = 375;
+            else if (ball_pos.x < 10) {
+                ball_pos.x = 750;
+                ball_pos.y = 375;
                 ball_x_velo *= -1;
                 player2_score += 1;
                 player2_score_text.setString(std::to_string(player2_score));
@@ -271,13 +276,14 @@ int main() {
     
         else if (ball_pos.x > 1460) {
 
-            if (player2_pos.y - 10 < ball_pos.y && ball_pos.y < player2_pos.y + 120 + 10) { 
-                ball_pos.x -= 10;
+            if (player2_pos.y - 5 < ball_pos.y && ball_pos.y < player2_pos.y + 120 + 5) { 
+                ball_pos.x -= 20;
                 ball_x_velo *= -1;
             }
 
-            else if (ball_pos.x > 1550) {
-                ball_pos.x = 375;
+            else if (ball_pos.x > 1570) {
+                ball_pos.x = 750;
+                ball_pos.y = 375;
                 ball_x_velo *= -1;
                 player1_score += 1;
                 player1_score_text.setString(std::to_string(player1_score));
@@ -288,10 +294,10 @@ int main() {
             ball_y_velo *= -1;
         }
 
-        ball.setPosition(ball_pos);
+        ball.setPosition(ball_pos);  
 
         // Check player score
-        if (player1_score >= 3 || player2_score >= 3) { // REVERT BACK TO 11!!
+        if (player1_score >= 2 || player2_score >= 2) { // REVERT BACK TO 11!!
             gameOver = true;
             gameOverScreen();
             resetGame();
