@@ -25,85 +25,79 @@ sf::Event event;
 // Create homescreen
 void homescreen() { 
 
+    sf::Text WelcomeText1;
+    WelcomeText1.setFont(pixel_font);
+    WelcomeText1.setString("Welcome to C++ Pong");
+    WelcomeText1.setCharacterSize(70);
+    WelcomeText1.setPosition(350, 250);
+    WelcomeText1.setFillColor(sf::Color(0, 138, 255));
+
+    sf::Text WelcomeText2;
+    WelcomeText2.setFont(pixel_font);
+    WelcomeText2.setString("Click Spacebar To Play");
+    WelcomeText2.setCharacterSize(40);
+    WelcomeText2.setPosition(500, 400);
+
+    sf::Text WelcomeText3;
+    WelcomeText3.setFont(pixel_font);
+    WelcomeText3.setString("Difficulty: " + std::to_string(DIFFICULTY));
+    WelcomeText3.setCharacterSize(40);
+    WelcomeText3.setPosition(620, 475);
+    WelcomeText3.setFillColor(sf::Color::Red);
+
     while (!gameStarted) {
         window.clear(sf::Color::Black);
 
-        sf::Text WelcomeText1;
-        WelcomeText1.setFont(pixel_font);
-        WelcomeText1.setString("Welcome to C++ Pong");
-        WelcomeText1.setCharacterSize(70);
-        WelcomeText1.setPosition(350, 250);
-        WelcomeText1.setFillColor(sf::Color(0, 138, 255));
-
-        sf::Text WelcomeText2;
-        WelcomeText2.setFont(pixel_font);
-        WelcomeText2.setString("Click Spacebar To Play");
-        WelcomeText2.setCharacterSize(40);
-        WelcomeText2.setPosition(500, 400);
-
-        sf::Text WelcomeText3;
-        WelcomeText3.setFont(pixel_font);
-        WelcomeText3.setString("Difficulty: " + std::to_string(DIFFICULTY));
-        WelcomeText3.setCharacterSize(40);
-        WelcomeText3.setPosition(620, 475);
-        WelcomeText3.setFillColor(sf::Color::Red);
-
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
-                    window.close();
-                    return;
-                }
-            }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
                 window.close();
                 return;
             }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                gameStarted = true;
-            }
-
-            window.draw(WelcomeText1);
-            window.draw(WelcomeText2);
-            window.draw(WelcomeText3);
-            window.display();
         }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+            window.close();
+            return;
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            gameStarted = true;
+        }
+
+        window.draw(WelcomeText1);
+        window.draw(WelcomeText2);
+        window.draw(WelcomeText3);
+        window.display();
+    }
 }
 
 
 // Create gameOverScreen
 void gameOverScreen() {
+
+    sf::Text GameOverText1;
+    GameOverText1.setFont(pixel_font);
+    GameOverText1.setString("Game Over :(");
+    GameOverText1.setCharacterSize(70);
+    GameOverText1.setPosition(500, 250);
+    GameOverText1.setFillColor(sf::Color::Red);
+
+    sf::Text GameOverText2;
+    GameOverText2.setFont(pixel_font);
+    GameOverText2.setString("Click Spacebar to play again or q to exit");
+    GameOverText2.setCharacterSize(40);
+    GameOverText2.setPosition(335, 400);
+    GameOverText2.setFillColor(sf::Color(0, 138, 255));
+
+    sf::Text GameOverText3;
+    GameOverText3.setFont(pixel_font);
+    GameOverText3.setString("Select a number (1-3) to play again with a new difficulty");
+    GameOverText3.setCharacterSize(40);
+    GameOverText3.setPosition(210, 500);
+    GameOverText3.setFillColor(sf::Color::White);
+
     while (gameOver) {
-
         window.clear(sf::Color::Black);
-        pixel_font.loadFromFile("Helpers/fontpixel.ttf");
-
-        sf::Text GameOverText1;
-        GameOverText1.setFont(pixel_font);
-        GameOverText1.setString("Game Over :(");
-        GameOverText1.setCharacterSize(70);
-        GameOverText1.setPosition(500, 250);
-        GameOverText1.setFillColor(sf::Color::Red);
-
-        sf::Text GameOverText2;
-        GameOverText2.setFont(pixel_font);
-        GameOverText2.setString("Click Spacebar to play again or q to exit");
-        GameOverText2.setCharacterSize(40);
-        GameOverText2.setPosition(335, 400);
-        GameOverText2.setFillColor(sf::Color(0, 138, 255));
-
-        sf::Text GameOverText3;
-        GameOverText3.setFont(pixel_font);
-        GameOverText3.setString("Select a number (1-3) to play again with a new difficulty");
-        GameOverText3.setCharacterSize(40);
-        GameOverText3.setPosition(210, 500);
-        GameOverText3.setFillColor(sf::Color::White);
-
-        window.draw(GameOverText1);
-        window.draw(GameOverText2);
-        window.draw(GameOverText3);
-        window.display();
 
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -146,11 +140,14 @@ void gameOverScreen() {
                 gameOver = false;
                 homescreen();
             }
-        
         }
+
+        window.draw(GameOverText1);
+        window.draw(GameOverText2);
+        window.draw(GameOverText3);
+        window.display();
     }
 }
-
 
 
 void resetGame() {
@@ -162,12 +159,11 @@ void resetGame() {
 }
 
 
-
 int main() {
 
-    // Create window 
+    // Initialize some stuff
     window.setFramerateLimit(60);
-
+    pixel_font.loadFromFile("Helpers/fontpixel.ttf");
 
     // Randomness for initial paddle positions
     std::default_random_engine generator(static_cast<unsigned>(std::time(nullptr)));
@@ -207,33 +203,22 @@ int main() {
     player2_score_text.setCharacterSize(70);
     player2_score_text.setPosition(1050, 50);
     
-    
-
-
     // Main game loop
     while (window.isOpen()) {
-        
-        sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-
         }
 
         // Start game screen
         if (!gameStarted) {
-
             homescreen();
-
         }
-
 
         // Ball movement and logic
         ball_pos.x += ball_x_velo;
         ball_pos.y += ball_y_velo;
-
-
 
         // Player 1 movements
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && player1_pos.y < 620) { 
@@ -257,7 +242,6 @@ int main() {
             player2.setPosition(player2_pos);
         }
 
-
         // Ball paddle/wall collision logic
         if (ball_pos.x < 20) {
 
@@ -266,7 +250,6 @@ int main() {
                 ball_x_velo *= -1;
             }
 
-            //else if (ball_pos.x < 30) {
             else {
                 ball_pos.x = 750;
                 ball_pos.y = 375;
@@ -283,7 +266,6 @@ int main() {
                 ball_x_velo *= -1;
             }
 
-            //else if (ball_pos.x > 1570) {
             else {
                 ball_pos.x = 750;
                 ball_pos.y = 375;
@@ -300,14 +282,13 @@ int main() {
         ball.setPosition(ball_pos);  
 
         // Check player score
-        if (player1_score >= 2 || player2_score >= 2) { // REVERT BACK TO 11!!
+        if (player1_score >= 11 || player2_score >= 11) { 
             gameOver = true;
             gameOverScreen();
             resetGame();
             gameStarted = false;
             continue;
         }
-
 
         window.clear(sf::Color::Black);
         window.draw(player1);
@@ -319,15 +300,9 @@ int main() {
 
     }
 
-    
-
     return 0;
 
-
-
 }
-
-
 
 
 
