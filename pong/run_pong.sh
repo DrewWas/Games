@@ -1,1 +1,1 @@
-clang++ -std=c++17 -o pong_cpp pong.cpp $(pkg-config --cflags --libs sfml-graphics sfml-window sfml-system) && ./pong_cpp
+clang -std=c11 -o pong_c pong.c $(pkg-config --cflags --libs sdl2) && ./pong_c

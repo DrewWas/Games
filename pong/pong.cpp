@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 
-// Constants (put into __init__ method??)
+// Constants 
 bool gameStarted = false;
 bool gameOver = false;
 int DIFFICULTY = 1; 
