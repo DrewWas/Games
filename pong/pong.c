@@ -1,5 +1,7 @@
 #include <SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
+
 
 int main(int argc, char* argv[]) {
 
@@ -10,6 +12,10 @@ int main(int argc, char* argv[]) {
     int quit = 0;
     int WIDTH = 1500;
     int HEIGHT = 750;
+    int player1_score = 0;
+    int player2_score = 0;
+    SDL_Color BLUE = {0, 138, 255};
+    SDL_Color WHITE = {255, 255, 255};
     int result = SDL_Init(SDL_INIT_EVERYTHING);
     
 
@@ -17,7 +23,7 @@ int main(int argc, char* argv[]) {
     int player1_y = 300;  // Make random
     int player2_y = 300;  // Make random
     int ball_x = 750;
-    int ball_7 = 375;
+    int ball_y = 375;
 
     // Player 1
     SDL_Rect player1;
@@ -28,7 +34,7 @@ int main(int argc, char* argv[]) {
 
     // Player 2 
     SDL_Rect player2;
-    player2.x = 1470;
+    player2.x = 1475;
     player2.y = 300;
     player2.w = 15;
     player2.h = 120;
@@ -46,6 +52,13 @@ int main(int argc, char* argv[]) {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
 
 
+    // Font & Text Setup
+    TTF_Init();
+    TTF_Font* pixelFont = TTF_OpenFont("Helpers/fontpixel.ttf", 70);
+    SDL_Surface* p1ScoreSurface = TTF_RenderText_Solid(pixelFont, " HELLO!!", WHITE);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, p1ScoreSurface);
+
+
     int keyState[SDL_NUM_SCANCODES] = {0};
     // Main event loop
     while (!quit) {
@@ -54,31 +67,43 @@ int main(int argc, char* argv[]) {
                 quit = 1;
                 break;
             }
-
-            if (event.type == SDL_KEYDOWN) {
-                keyState[event.key.keysym.scancode] = 1;
-            }
-
-            else if (event.type == SDL_KEYUP) {
-                keyState[event.key.keysym.scancode] = 0;
-            }
-
-            if (keyState[SDL_SCANCODE_UP] && player1.y > 0) {
-                player1.y -= 12;
-            }
-
-            if (keyState[SDL_SCANCODE_DOWN] && player1.y < 630) {
-                player1.y += 12;
-            }
+        }
 
 
-    }
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+        // Update player position based on key states
+
+        if (state[SDL_SCANCODE_W] && player1.y > 10) {
+            player1.y -= 15; 
+        }
+
+        if (state[SDL_SCANCODE_S] && player1.y < 620) {
+            player1.y += 15;
+        }
+
+        if (state[SDL_SCANCODE_UP] && player2.y > 10) {
+            player2.y -= 15; 
+        }
+
+        if (state[SDL_SCANCODE_DOWN] && player2.y < 620) {
+            player2.y += 15; 
+        }
 
 
+        
 
         // Draw background 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
+
+
+        // Draw Scores 
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        //SDL_RenderPresent(renderer);   (Why is this needed)??
+
+        // Draw Ball
+
 
         // Draw Player1
         SDL_SetRenderDrawColor(renderer, 0, 138, 255, 0);
@@ -90,9 +115,17 @@ int main(int argc, char* argv[]) {
 
         // Update
         SDL_RenderPresent(renderer);
-        SDL_Delay(60);
+        SDL_Delay(5);
 
     } 
+    
+    SDL_DestroyTexture(texture);    
+    SDL_FreeSurface(p1ScoreSurface);
+    TTF_CloseFont(pixelFont);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    SDL_Quit();
 
     return 0;
 
