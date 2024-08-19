@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
+#include <time.h>
 
 
 void drawBall(SDL_Renderer *renderer, int ball_x, int ball_y, int radius) {
@@ -34,26 +35,25 @@ int main(int argc, char* argv[]) {
     
 
     // Game Constants
-    int player1_y = 300;  // Make random
-    int player2_y = 300;  // Make random
+    srand(time(NULL));
+    int player1_y = 100 + rand() % 501;
+    int player2_y = 100 + rand() % 501;  
     int ball_x = 750;
     int ball_y = 375;
-    int ball_x_velo = 12;
-    int ball_y_velo = 12;
-    //int ball_x_velo = 2;
-    //int ball_y_velo = 2;
+    int ball_x_velo = 8;
+    int ball_y_velo = 8;
 
     // Player 1
     SDL_Rect player1;
     player1.x = 10;
-    player1.y = 300;
+    player1.y = player1_y;
     player1.w = 15;
     player1.h = 120;
 
     // Player 2 
     SDL_Rect player2;
     player2.x = 1475;
-    player2.y = 300;
+    player2.y = player2_y;
     player2.w = 15;
     player2.h = 120;
 
@@ -104,20 +104,19 @@ int main(int argc, char* argv[]) {
         // Update player position based on key states
 
         if (state[SDL_SCANCODE_W] && player1.y > 10) {
-            player1.y -= 17; 
-            //player1_score += 1; // TESTING!!
+            player1.y -= 9; 
         }
 
         if (state[SDL_SCANCODE_S] && player1.y < 620) {
-            player1.y += 17;
+            player1.y += 9;
         }
 
         if (state[SDL_SCANCODE_UP] && player2.y > 10) {
-            player2.y -= 17; 
+            player2.y -= 9; 
         }
 
         if (state[SDL_SCANCODE_DOWN] && player2.y < 620) {
-            player2.y += 17; 
+            player2.y += 9; 
         }
 
         // Update ball position (add if conditions)
@@ -200,6 +199,5 @@ int main(int argc, char* argv[]) {
     return 0;
 
 }
-
 
 
