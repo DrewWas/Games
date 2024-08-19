@@ -38,8 +38,10 @@ int main(int argc, char* argv[]) {
     int player2_y = 300;  // Make random
     int ball_x = 750;
     int ball_y = 375;
-    int ball_x_velo = 13;
-    int ball_y_velo = 13;
+    int ball_x_velo = 12;
+    int ball_y_velo = 12;
+    //int ball_x_velo = 2;
+    //int ball_y_velo = 2;
 
     // Player 1
     SDL_Rect player1;
@@ -102,37 +104,50 @@ int main(int argc, char* argv[]) {
         // Update player position based on key states
 
         if (state[SDL_SCANCODE_W] && player1.y > 10) {
-            player1.y -= 15; 
+            player1.y -= 17; 
             //player1_score += 1; // TESTING!!
         }
 
         if (state[SDL_SCANCODE_S] && player1.y < 620) {
-            player1.y += 15;
+            player1.y += 17;
         }
 
         if (state[SDL_SCANCODE_UP] && player2.y > 10) {
-            player2.y -= 15; 
+            player2.y -= 17; 
         }
 
         if (state[SDL_SCANCODE_DOWN] && player2.y < 620) {
-            player2.y += 15; 
+            player2.y += 17; 
         }
 
         // Update ball position (add if conditions)
         ball_x += ball_x_velo;
         ball_y -= ball_y_velo;
 
-        if (ball_x < 15 || ball_x > 1485) {
+        if (ball_x < 40 || ball_x > 1460) {
             // check if player paddle is in the way and if not reset
-            if ((ball_x < 15) && (ball_y > player1.y - 10) && (ball_y < player1.y + 130)) {
+            // Make some of this code more crisp and fix zigzag
+            if ((ball_x < 30) && (ball_y > player1.y - 10) && (ball_y < player1.y + 130)) {
+                ball_x += 20;
                 ball_x_velo *= -1;
+                ball_x += 20;
             }
-            else if ((ball_x > 1485) && (ball_y > player2.y - 10) && (ball_y < player2.y + 130)) {
+            else if ((ball_x > 1470) && (ball_y > player2.y - 10) && (ball_y < player2.y + 130)) {
+                ball_x -= 20;
                 ball_x_velo *= -1;
+                ball_x -= 20;
             }
-            else {
+            else if (ball_x < -15|| ball_x > 1515){
+                if (ball_x < 10) {
+                    player2_score += 1;
+                }
+                else if (ball_x > 1490) {
+                    player1_score += 1;
+                }
+
                 ball_x = 750;
                 ball_y = 375;
+                ball_x_velo *= -1;
             }
         }
 
