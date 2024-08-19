@@ -12,8 +12,70 @@ void drawBall(SDL_Renderer *renderer, int ball_x, int ball_y, int radius) {
             }
         }
     }
+}
 
 
+void homeScreen(SDL_Renderer* renderer, TTF_Font* font_big, 
+    TTF_Font* font_small, SDL_Color white, SDL_Color blue, SDL_Color red, int DIFFICULTY) {
+
+    char difficultyText[50];
+    snprintf(difficultyText, sizeof(difficultyText), "Difficulty: %d", DIFFICULTY);
+
+    SDL_Surface* surface1 = TTF_RenderText_Solid(font_big, "Welcome to Pong in C !", blue);
+    SDL_Surface* surface2 = TTF_RenderText_Solid(font_small, "Click Spacebar to Play", white);
+    SDL_Surface* surface3 = TTF_RenderText_Solid(font_small, difficultyText, red); 
+
+    SDL_Texture* surface1Texture = SDL_CreateTextureFromSurface(renderer, surface1);
+    SDL_Texture* surface2Texture = SDL_CreateTextureFromSurface(renderer, surface2);
+    SDL_Texture* surface3Texture = SDL_CreateTextureFromSurface(renderer, surface3);
+
+    SDL_FreeSurface(surface1);
+    SDL_FreeSurface(surface2);
+    SDL_FreeSurface(surface3);
+    SDL_Rect destRect1 = {350, 250, surface1->w, surface1->h};
+    SDL_Rect destRect2 = {510, 400, surface2->w, surface2->h};
+    SDL_Rect destRect3 = {620, 475, surface3->w, surface3->h};
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, surface1Texture, NULL, &destRect1);
+    SDL_RenderCopy(renderer, surface2Texture, NULL, &destRect2);
+    SDL_RenderCopy(renderer, surface3Texture, NULL, &destRect3);
+    SDL_RenderPresent(renderer);
+
+    SDL_Delay(5);
+}
+
+
+void gameOver(SDL_Renderer* renderer, TTF_Font* font_big, 
+    TTF_Font* font_small, SDL_Color white, SDL_Color blue, SDL_Color red) {
+
+
+    SDL_Surface* surface1 = TTF_RenderText_Solid(font_big, "Gmae Over :(", red);
+    SDL_Surface* surface2 = TTF_RenderText_Solid(font_small, "Click Spacebar to play again or q to exit", blue);
+    SDL_Surface* surface3 = TTF_RenderText_Solid(font_small, "Select a number (1-3) to play again with a new difficulty", white); 
+
+    SDL_Texture* surface1Texture = SDL_CreateTextureFromSurface(renderer, surface1);
+    SDL_Texture* surface2Texture = SDL_CreateTextureFromSurface(renderer, surface2);
+    SDL_Texture* surface3Texture = SDL_CreateTextureFromSurface(renderer, surface3);
+
+    SDL_FreeSurface(surface1);
+    SDL_FreeSurface(surface2);
+    SDL_FreeSurface(surface3);
+    SDL_Rect destRect1 = {500, 250, surface1->w, surface1->h};
+    SDL_Rect destRect2 = {335, 400, surface2->w, surface2->h};
+    SDL_Rect destRect3 = {210, 500, surface3->w, surface3->h};
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+
+    SDL_RenderCopy(renderer, surface1Texture, NULL, &destRect1);
+    SDL_RenderCopy(renderer, surface2Texture, NULL, &destRect2);
+    SDL_RenderCopy(renderer, surface3Texture, NULL, &destRect3);
+    SDL_RenderPresent(renderer);
+
+    SDL_Delay(5);
 
 }
 
@@ -24,6 +86,9 @@ int main(int argc, char* argv[]) {
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Event event;
+    int gameOverScreen = 0;
+    int DIFFICULTY = 1;
+    int homeScreenStart = 1;
     int quit = 0;
     int WIDTH = 1500;
     int HEIGHT = 750;
@@ -31,6 +96,7 @@ int main(int argc, char* argv[]) {
     int player2_score = 0;
     SDL_Color BLUE = {0, 138, 255};
     SDL_Color WHITE = {255, 255, 255};
+    SDL_Color RED = {255, 0, 0};
     int result = SDL_Init(SDL_INIT_EVERYTHING);
     
 
@@ -58,9 +124,7 @@ int main(int argc, char* argv[]) {
     player2.h = 120;
 
 
-
     window = SDL_CreateWindow("Pong in C", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN); 
-
 
     /* Show window on monitor rather than main screen This needs to be edited if not using a monitor, but then again, all these programs are only meant to be played on a specific monitor size/dimension (mine) */
 
@@ -76,10 +140,36 @@ int main(int argc, char* argv[]) {
     TTF_Font* pixelFontMed = TTF_OpenFont("Helpers/fontpixel.ttf", 40);
 
 
-
     int keyState[SDL_NUM_SCANCODES] = {0};
+
     // Main event loop
     while (!quit) {
+        const Uint8 *state;
+        state = SDL_GetKeyboardState(NULL);
+
+        // Homescreen loop
+        while (homeScreenStart) {
+             while (SDL_PollEvent(&event) != 0) {
+                 if (event.type == SDL_QUIT) {
+                     homeScreenStart = 0;
+                     quit = 1;
+                     break;
+                 }
+             }
+
+            if (state[SDL_SCANCODE_SPACE]) {
+                homeScreenStart = 0;
+            }
+            if (state[SDL_SCANCODE_Q]) {
+                homeScreenStart = 0;
+                quit = 1;
+            }
+
+            homeScreen(renderer, pixelFontLarge, pixelFontMed, WHITE, BLUE, RED, DIFFICULTY);
+        }
+
+
+        // Game loop
         while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_QUIT) {
                 quit = 1;
@@ -87,24 +177,25 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_Q]) {
+            quit = 1;
+        }
 
         // Update player position based on key states
-
         if (state[SDL_SCANCODE_W] && player1.y > 10) {
-            player1.y -= 13; 
+            player1.y -= 18; 
         }
 
         if (state[SDL_SCANCODE_S] && player1.y < 620) {
-            player1.y += 13;
+            player1.y += 18;
         }
 
         if (state[SDL_SCANCODE_UP] && player2.y > 10) {
-            player2.y -= 13; 
+            player2.y -= 18; 
         }
 
         if (state[SDL_SCANCODE_DOWN] && player2.y < 620) {
-            player2.y += 13; 
+            player2.y += 18; 
         }
 
         // Update score text
@@ -123,13 +214,11 @@ int main(int argc, char* argv[]) {
         SDL_Rect destRect2 = {350, 50, p2ScoreSurface->w, p2ScoreSurface->h};
 
 
-        // Update ball position (add if conditions)
-        ball_x += ball_x_velo;
+        // Update ball position 
         ball_y -= ball_y_velo;
+        ball_x += ball_x_velo;
 
         if (ball_x < 40 || ball_x > 1460) {
-            // check if player paddle is in the way and if not reset
-            // Make some of this code more crisp and fix zigzag
             if ((ball_x < 30) && (ball_y > player1.y - 10) && (ball_y < player1.y + 130)) {
                 ball_x += 20;
                 ball_x_velo *= -1;
@@ -160,9 +249,13 @@ int main(int argc, char* argv[]) {
         }
 
 
-        // DEBUGGING
-        //printf("%s", player1_score);
-        
+        // Check if game is over
+        if (player1_score >= 11 || player2_score >= 11) {
+            gameOverScreen = 1;
+            SDL_Delay(10);
+        }
+
+
 
         // Draw background 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
@@ -192,9 +285,79 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
         SDL_Delay(5);
 
+        while (gameOverScreen) {
+             while (SDL_PollEvent(&event) != 0) {
+                 if (event.type == SDL_QUIT) {
+                     gameOverScreen = 0;
+                     quit = 1;
+                     break;
+                 }
+             }
+
+            if (state[SDL_SCANCODE_SPACE]) {
+                gameOverScreen = 0;
+                homeScreenStart = 1;
+                // Reset game info
+                player1_score = 0;
+                player2_score = 0;
+                ball_x = 750;
+                ball_y = 375;
+                SDL_Delay(100); 
+            }
+
+            if (state[SDL_SCANCODE_1]) {
+                gameOverScreen = 0;
+                homeScreenStart = 1;
+                // Reset game info
+                player1_score = 0;
+                player2_score = 0;
+                ball_x = 750;
+                ball_y = 375;
+                DIFFICULTY = 1;
+                ball_x_velo = 12;
+                ball_x_velo = 12;
+                SDL_Delay(100);
+            }
+
+
+            if (state[SDL_SCANCODE_2]) {
+                gameOverScreen = 0;
+                homeScreenStart = 1;
+                // Reset game info
+                player1_score = 0;
+                player2_score = 0;
+                ball_x = 750;
+                ball_y = 375;
+                DIFFICULTY = 2;
+                ball_x_velo = 15;
+                ball_x_velo = 15;
+                SDL_Delay(100);
+            }
+
+            if (state[SDL_SCANCODE_3]) {
+                gameOverScreen = 0;
+                homeScreenStart = 1;
+                // Reset game info
+                player1_score = 0;
+                player2_score = 0;
+                ball_x = 750;
+                ball_y = 375;
+                DIFFICULTY = 3;
+                ball_x_velo = 18;
+                ball_y_velo = 18;
+                SDL_Delay(100);
+            }
+
+            if (state[SDL_SCANCODE_Q]) {
+                gameOverScreen = 0;
+                quit = 1;
+            }
+
+            gameOver(renderer, pixelFontLarge, pixelFontMed, WHITE, BLUE, RED);
+        }
+
     } 
     
-    //SDL_DestroyTexture(texture);    
     TTF_CloseFont(pixelFontLarge);
     TTF_CloseFont(pixelFontMed);
     SDL_DestroyRenderer(renderer);
