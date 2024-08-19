@@ -44,6 +44,10 @@ void homeScreen(SDL_Renderer* renderer, TTF_Font* font_big,
     SDL_RenderCopy(renderer, surface3Texture, NULL, &destRect3);
     SDL_RenderPresent(renderer);
 
+    SDL_DestroyTexture(surface1Texture);
+    SDL_DestroyTexture(surface2Texture);
+    SDL_DestroyTexture(surface3Texture);
+
     SDL_Delay(5);
 }
 
@@ -74,6 +78,10 @@ void gameOver(SDL_Renderer* renderer, TTF_Font* font_big,
     SDL_RenderCopy(renderer, surface2Texture, NULL, &destRect2);
     SDL_RenderCopy(renderer, surface3Texture, NULL, &destRect3);
     SDL_RenderPresent(renderer);
+
+    SDL_DestroyTexture(surface1Texture);
+    SDL_DestroyTexture(surface2Texture);
+    SDL_DestroyTexture(surface3Texture);
 
     SDL_Delay(5);
 
@@ -266,6 +274,9 @@ int main(int argc, char* argv[]) {
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, p1ScoreTexture, NULL, &destRect1);
         SDL_RenderCopy(renderer, p2ScoreTexture, NULL, &destRect2);
+
+        SDL_DestroyTexture(p1ScoreTexture);
+        SDL_DestroyTexture(p2ScoreTexture);
 
 
         // Draw Ball
