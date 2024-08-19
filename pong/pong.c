@@ -52,7 +52,7 @@ void gameOver(SDL_Renderer* renderer, TTF_Font* font_big,
     TTF_Font* font_small, SDL_Color white, SDL_Color blue, SDL_Color red) {
 
 
-    SDL_Surface* surface1 = TTF_RenderText_Solid(font_big, "Gmae Over :(", red);
+    SDL_Surface* surface1 = TTF_RenderText_Solid(font_big, "Game Over :(", red);
     SDL_Surface* surface2 = TTF_RenderText_Solid(font_small, "Click Spacebar to play again or q to exit", blue);
     SDL_Surface* surface3 = TTF_RenderText_Solid(font_small, "Select a number (1-3) to play again with a new difficulty", white); 
 
@@ -302,7 +302,7 @@ int main(int argc, char* argv[]) {
                 player2_score = 0;
                 ball_x = 750;
                 ball_y = 375;
-                SDL_Delay(100); 
+                SDL_Delay(250); 
             }
 
             if (state[SDL_SCANCODE_1]) {
