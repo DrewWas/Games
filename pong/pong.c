@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
     int player2_y = 100 + rand() % 501;  
     int ball_x = 750;
     int ball_y = 375;
-    int ball_x_velo = 8;
-    int ball_y_velo = 8;
+    int ball_x_velo = 12;
+    int ball_y_velo = 12; 
 
     // Player 1
     SDL_Rect player1;
@@ -72,20 +72,9 @@ int main(int argc, char* argv[]) {
 
     // Font & Text Setup
     TTF_Init();
-    TTF_Font* pixelFont = TTF_OpenFont("Helpers/fontpixel.ttf", 10);
+    TTF_Font* pixelFontLarge = TTF_OpenFont("Helpers/fontpixel.ttf", 70);
+    TTF_Font* pixelFontMed = TTF_OpenFont("Helpers/fontpixel.ttf", 40);
 
-    SDL_Rect destR = { 10, 10, 10, 10}; // test
-
-
-    char score_text[2];
-    sprintf(score_text, "%d", player1_score);
-
-    //SDL_Surface* p1ScoreSurface = TTF_RenderText_Solid(pixelFont, "HELLO!!!", WHITE);
-    SDL_Surface* p1ScoreSurface = TTF_RenderText_Solid(pixelFont, score_text, WHITE);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, p1ScoreSurface);
-
-
-    TTF_SizeText(pixelFont, score_text, &destR.w, &destR.h); // test 
 
 
     int keyState[SDL_NUM_SCANCODES] = {0};
@@ -98,26 +87,41 @@ int main(int argc, char* argv[]) {
             }
         }
 
-
         const Uint8 *state = SDL_GetKeyboardState(NULL);
 
         // Update player position based on key states
 
         if (state[SDL_SCANCODE_W] && player1.y > 10) {
-            player1.y -= 9; 
+            player1.y -= 13; 
         }
 
         if (state[SDL_SCANCODE_S] && player1.y < 620) {
-            player1.y += 9;
+            player1.y += 13;
         }
 
         if (state[SDL_SCANCODE_UP] && player2.y > 10) {
-            player2.y -= 9; 
+            player2.y -= 13; 
         }
 
         if (state[SDL_SCANCODE_DOWN] && player2.y < 620) {
-            player2.y += 9; 
+            player2.y += 13; 
         }
+
+        // Update score text
+        char score1Text[10];
+        sprintf(score1Text, "%d", player1_score);
+        SDL_Surface* p1ScoreSurface= TTF_RenderText_Solid(pixelFontLarge, score1Text, WHITE);
+        SDL_Texture* p1ScoreTexture = SDL_CreateTextureFromSurface(renderer, p1ScoreSurface);
+        SDL_FreeSurface(p1ScoreSurface);
+        SDL_Rect destRect1 = {1050, 50, p1ScoreSurface->w, p1ScoreSurface->h};
+
+        char score2Text[10];
+        sprintf(score2Text, "%d", player2_score);
+        SDL_Surface* p2ScoreSurface = TTF_RenderText_Solid(pixelFontLarge, score2Text, WHITE);
+        SDL_Texture* p2ScoreTexture = SDL_CreateTextureFromSurface(renderer, p2ScoreSurface);
+        SDL_FreeSurface(p2ScoreSurface);
+        SDL_Rect destRect2 = {350, 50, p2ScoreSurface->w, p2ScoreSurface->h};
+
 
         // Update ball position (add if conditions)
         ball_x += ball_x_velo;
@@ -166,8 +170,10 @@ int main(int argc, char* argv[]) {
 
 
         // Draw Scores 
-        //SDL_RenderCopy(renderer, texture, NULL, NULL);
-        //SDL_RenderPresent(renderer);  (why is this needed?? It just fucks shit up)
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, p1ScoreTexture, NULL, &destRect1);
+        SDL_RenderCopy(renderer, p2ScoreTexture, NULL, &destRect2);
+
 
         // Draw Ball
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
@@ -188,9 +194,9 @@ int main(int argc, char* argv[]) {
 
     } 
     
-    SDL_DestroyTexture(texture);    
-    SDL_FreeSurface(p1ScoreSurface);
-    TTF_CloseFont(pixelFont);
+    //SDL_DestroyTexture(texture);    
+    TTF_CloseFont(pixelFontLarge);
+    TTF_CloseFont(pixelFontMed);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     TTF_Quit();
